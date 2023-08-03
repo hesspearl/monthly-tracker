@@ -1,35 +1,97 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+import { useEffect, useMemo } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Container, Toast } from "react-bootstrap";
+import MonthlyList from "./components/monthlyList";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useLocalStorage } from "./hook/useLocalStorage";
+import NoteLayout from "./components/monthlyPageLayout";
+import Note from "./components/monthpurchase";
+interface StringValidator {
+  isAcceptable(s: string): boolean;
+}
+const lettersRegexp = /^[A-Za-z]+$/;
+class LettersOnlyValidator implements StringValidator {
+  isAcceptable(s: string) {
+    return lettersRegexp.test(s);
+  }
 }
 
-export default App
+export type Tag = {
+  id: string;
+  label: string;
+};
+
+export type Note = {
+  id: string;
+} & NoteData;
+export type RawNote = {
+  id: string;
+} & RawNoteData;
+
+export type RawNoteData = {
+  title: string;
+  markdown: string;
+  tagsIds: string[];
+};
+
+export type NoteData = {
+  title: string;
+  markdown: string;
+  tags: Tag[];
+};
+
+function App() {
+  const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", []);
+  const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
+
+  useEffect(() => {
+    setNotes([
+      {
+        id: "0",
+        title: "test",
+        markdown: "",
+        tagsIds: [],
+      },
+    ]);
+  }, []);
+
+  const notesWithTags = useMemo(
+    () =>
+      notes.map((note) => ({
+        ...note,
+        tags: tags.filter((tag) => note.tagsIds.includes(tag.id)),
+      })),
+    [notes, tags]
+  );
+  return (
+    <Container className="my-4">
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <MonthlyList
+              // availableTags={tags}
+              notes={notesWithTags}
+              // {...{ onDeleteTag, onUpdateTag }}
+            />
+          }
+        />
+        <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
+          <Route index element={<Note />} />
+          {/* <Route
+            path="edit"
+            element={
+              <EditNotes
+                onSubmit={onUpdateNote}
+                onAddTag={onAddTag}
+                availableTags={tags}
+              />
+            }
+          />  */}
+        </Route>
+      </Routes>
+    </Container>
+  );
+}
+
+export default App;

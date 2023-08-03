@@ -1,0 +1,21 @@
+.container{
+    background-color: #B6B6B6B6;
+    max-width: 600px;
+    min-width: 300px;
+    border-radius: 15px;
+    max-height: 500px;
+overflow-y: auto;
+}
+
+.monthContainer{
+background-color: white;
+border-radius: 10px;
+}
+.dailyContainer{
+    background-color: #E8E8E8
+}
+.currentMonthContainer{
+    background-color: #B6b5ed;
+    border-radius: 10px;
+    border:1px solid black
+    }

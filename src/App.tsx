@@ -1,11 +1,11 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Container, Toast } from "react-bootstrap";
 import MonthlyList from "./components/monthlyList";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useLocalStorage } from "./hook/useLocalStorage";
 import NoteLayout from "./components/monthlyPageLayout";
-import Note from "./components/monthpurchase";
+import MonthlyPurchase from "./components/monthpurchase";
 interface StringValidator {
   isAcceptable(s: string): boolean;
 }
@@ -43,6 +43,7 @@ export type NoteData = {
 function App() {
   const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", []);
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
   useEffect(() => {
     setNotes([
@@ -50,10 +51,21 @@ function App() {
         id: "0",
         title: "test",
         markdown: "",
-        tagsIds: [],
+        tagsIds: ["0"],
+      },
+    ]);
+
+    setTags([
+      {
+        id: "0",
+        label: "transport",
       },
     ]);
   }, []);
+
+  function onAddTag(tag: Tag) {
+    setTags((prev) => [...prev, tag]);
+  }
 
   const notesWithTags = useMemo(
     () =>
@@ -72,12 +84,20 @@ function App() {
             <MonthlyList
               // availableTags={tags}
               notes={notesWithTags}
-              // {...{ onDeleteTag, onUpdateTag }}
+              {...{ selectedTags }}
             />
           }
         />
         <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
-          <Route index element={<Note />} />
+          <Route
+            index
+            element={
+              <MonthlyPurchase
+                availableTags={tags}
+                {...{ onAddTag, selectedTags, setSelectedTags }}
+              />
+            }
+          />
           {/* <Route
             path="edit"
             element={

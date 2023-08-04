@@ -1,18 +1,35 @@
-import { Badge, Button, Col, Container, Row, Stack } from "react-bootstrap";
+import { Badge, Button, Col, Image, Row, Stack } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { useNote } from "../../hook/useNote";
 import style from "./monthPurchase.module.css";
 import MonthlyRow from "./monthlyRow";
 import DailyRow from "./dailyRow";
+import edit from "../../assets/setting.svg";
+import EditTagModal from "../EditTagModal";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Tag } from "../../App";
 
-interface NoteProps {
+interface MonthlyPurchaseProps {
   onDelete: (id: string) => void;
+  selectedTags: Tag[];
+  setSelectedTags: Dispatch<SetStateAction<Tag[]>>;
+  onAddTag: (tag: Tag) => void;
+  availableTags: Tag[];
 }
 
-function Note({ onDelete }: NoteProps) {
+function MonthlyPurchase({
+  onDelete,
+  selectedTags,
+  setSelectedTags,
+  onAddTag,
+  availableTags,
+}: MonthlyPurchaseProps) {
   const note = useNote();
   const navigate = useNavigate();
+  const [editTagsModalIsOpen, setEditTagsModalIsOpen] =
+    useState<boolean>(false);
+
   return (
     <>
       <Row className="align-items-center mb-4">
@@ -20,12 +37,22 @@ function Note({ onDelete }: NoteProps) {
           <h1>Expends Target :{note.title}</h1>
           {note.tags.length > 0 && (
             <Stack gap={1} direction="horizontal" className=" flex-wrap ">
-              <h1>Tags</h1>
+              <h1>Tags :</h1>
               {note.tags.map((tag) => (
-                <Badge key={tag.id} className="text-truncate py-2 ">
+                <Badge
+                  key={tag.id}
+                  bg="secondary"
+                  className="text-truncate p-2 fs-6 "
+                >
                   {tag.label}
                 </Badge>
               ))}
+
+              <Image
+                src={edit}
+                role="button"
+                onClick={() => setEditTagsModalIsOpen(true)}
+              />
             </Stack>
           )}
         </Col>
@@ -44,8 +71,14 @@ function Note({ onDelete }: NoteProps) {
           <MonthlyRow current />
         </Stack>
       </div>
+      <EditTagModal
+        {...{ selectedTags, setSelectedTags, onAddTag }}
+        availableTags={availableTags}
+        show={editTagsModalIsOpen}
+        handleClose={() => setEditTagsModalIsOpen(false)}
+      />
     </>
   );
 }
 
-export default Note;
+export default MonthlyPurchase;

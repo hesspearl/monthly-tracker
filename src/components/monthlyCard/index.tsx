@@ -1,9 +1,8 @@
 import { Tag } from "../../App";
-import { Badge, Card, Col, Row, Stack } from "react-bootstrap";
+import { Badge, Card, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styles from "./monthlyCard.module.css";
 import CarImage from "../../assets/checklistwithcars.jpg";
-
 export interface MonthlyCardProps {
   id: string;
   title: string;

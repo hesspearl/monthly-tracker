@@ -11,6 +11,7 @@ export type MonthlyListProps = {
   notes: MonthlyCardProps[];
   onUpdateTag: (id: string, label: string) => void;
   onDeleteTag: (id: string) => void;
+  selectedTags: Tag[];
 };
 
 function MonthlyList({
@@ -18,8 +19,8 @@ function MonthlyList({
   notes,
   onDeleteTag,
   onUpdateTag,
+  selectedTags,
 }: MonthlyListProps) {
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [text, setText] = useState<string>("");
   const [editTagsModalIsOpen, setEditTagsModalIsOpen] =
     useState<boolean>(false);

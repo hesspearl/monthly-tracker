@@ -26,22 +26,19 @@ function MonthlyList({
   const [editTagsModalIsOpen, setEditTagsModalIsOpen] =
     useState<boolean>(false);
 
-  console.log({ selectedTags });
-
   const filteredNotes = useMemo(
     () =>
       notes?.filter(
         (note) =>
-          (!text.length ||
-            note.title.toLowerCase().includes(text.toLocaleLowerCase())) &&
-          (availableTags.length !== 0 ||
-            availableTags.every((tag) =>
-              note.tags.some(
-                (noteTag) => noteTag?.label === text.toLocaleLowerCase()
-              )
-            ))
+          !text.length ||
+          note.title.toLowerCase().includes(text.toLocaleLowerCase()) ||
+          note.tags.some((noteTag) =>
+            noteTag?.label
+              .toLocaleLowerCase()
+              .includes(text.toLocaleLowerCase())
+          )
       ),
-    [text, availableTags, notes]
+    [text, notes]
   );
 
   return (

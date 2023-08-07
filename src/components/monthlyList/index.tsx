@@ -1,9 +1,10 @@
 import { useState, useMemo } from "react";
-import PageTitle from "../../pageTitle";
+import PageTitle from "../pageTitle";
 import { Row, Form, Col } from "react-bootstrap";
 //import NotesInputs from "./NotesInputs";
 import { Tag } from "../../App";
 import MonthlyCard, { MonthlyCardProps } from "../monthlyCard";
+import FormInput from "../formInput";
 //import EditTagModal from "./EditTagModal";
 
 export type MonthlyListProps = {
@@ -25,18 +26,22 @@ function MonthlyList({
   const [editTagsModalIsOpen, setEditTagsModalIsOpen] =
     useState<boolean>(false);
 
+  console.log({ selectedTags });
+
   const filteredNotes = useMemo(
     () =>
       notes?.filter(
         (note) =>
           (!text.length ||
             note.title.toLowerCase().includes(text.toLocaleLowerCase())) &&
-          (selectedTags.length === 0 ||
-            selectedTags.every((tag) =>
-              note.tags.some((noteTag) => noteTag?.id === tag.id)
+          (availableTags.length !== 0 ||
+            availableTags.every((tag) =>
+              note.tags.some(
+                (noteTag) => noteTag?.label === text.toLocaleLowerCase()
+              )
             ))
       ),
-    [text, selectedTags, notes]
+    [text, availableTags, notes]
   );
 
   return (
@@ -47,24 +52,11 @@ function MonthlyList({
         button1="Create"
         linkTo="/new"
       />
-      <Form>
-        <Form.Group
-          controlId="title"
-          className="d-flex flex-row align-items-center"
-        >
-          <Form.Label>Search</Form.Label>
-          <Form.Control
-            required
-            onChange={(e) => setText(e.target.value)}
-            value={text}
-            className={"mx-5"}
-            style={{ maxWidth: "50%" }}
-          />
-        </Form.Group>
-        {/* <NotesInputs
-          {...{ selectedTags, setSelectedTags, availableTags, text, setText }}
-        /> */}
-      </Form>
+      <FormInput
+        label="Search"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
       <Row xs={1} sm={2} lg={3} xl={4} className="g-4 my-2">
         {filteredNotes?.map((note) => (
           <Col key={note.id}>

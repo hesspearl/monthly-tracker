@@ -1,14 +1,12 @@
 import { Button, Col, Form, Modal, Row, Stack } from "react-bootstrap";
 import { MonthlyListProps } from "./monthlyList";
-import CreatableReactSelect from "react-select/creatable";
-import { Dispatch, SetStateAction } from "react";
-import { Tag } from "../App";
+import SelectTags, { SelectTagProps } from "./selectTags";
 
-interface EditTagModalProps extends Omit<MonthlyListProps, "notes"> {
+interface EditTagModalProps
+  extends Omit<MonthlyListProps, "notes">,
+    SelectTagProps {
   show: boolean;
   handleClose: () => void;
-  setSelectedTags: Dispatch<SetStateAction<Tag[]>>;
-  onAddTag: (tag: Tag) => void;
 }
 
 function EditTagModal({
@@ -50,30 +48,8 @@ function EditTagModal({
             ))}
           </Stack>
         </Form>
-        <CreatableReactSelect
-          isMulti
-          options={availableTags.map((tag) => ({
-            label: tag.label,
-            value: tag.id,
-          }))}
-          onCreateOption={(label) => {
-            const newTag = { id: label, label };
-
-            onAddTag(newTag);
-            setSelectedTags((prev) => [...prev, newTag]);
-          }}
-          value={selectedTags.map((tag) => ({
-            label: tag.label,
-            value: tag.id,
-          }))}
-          onChange={(selectedTags) => {
-            setSelectedTags(
-              selectedTags.map((tag) => ({
-                label: tag.label,
-                id: tag.value,
-              }))
-            );
-          }}
+        <SelectTags
+          {...{ selectedTags, setSelectedTags, onAddTag, availableTags }}
         />
       </Modal.Body>
     </Modal>

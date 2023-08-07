@@ -33,9 +33,11 @@ WithButtons extends true
           <Link to={linkTo}>
             <Button variant="primary">{button1}</Button>
           </Link>
-          {/* <Button variant="outline-secondary" onClick={onButton2Click}>
+          {/* 
+          <Button variant="outline-secondary" onClick={onButton2Click}>
             {button2}
-          </Button> */}
+          </Button> 
+          */}
         </Stack>
       </Col>
     </Row>

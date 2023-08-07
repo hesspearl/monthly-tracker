@@ -7,22 +7,24 @@ export interface MonthlyCardProps {
   id: string;
   title: string;
   tags: Tag[];
+  total: string;
+  image: string;
 }
-function MonthlyCard({ id, title, tags }: MonthlyCardProps) {
+function MonthlyCard({ id, title, tags, total, image }: MonthlyCardProps) {
   return (
     <Card
       as={Link}
       to={`/${id}`}
       className={` text-reset text-decoration-none  ${styles.card}`}
     >
-      <Card.Img variant="top" src={CarImage} style={{ height: 150 }} />
+      <Card.Img variant="top" src={image} style={{ height: 150 }} />
       <Card.Body className="rounded shadow" style={{ height: 100 }}>
         <Stack gap={2} className=" h-100">
           <Stack direction="horizontal" className="justify-content-between ">
             <span className="fs-4"> {title} </span>
 
             <Badge bg="secondary" pill className="mt-1 border">
-              200$
+              {total}$
             </Badge>
           </Stack>
 

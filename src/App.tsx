@@ -6,6 +6,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useLocalStorage } from "./hook/useLocalStorage";
 import NoteLayout from "./components/monthlyPageLayout";
 import MonthlyPurchase from "./components/monthpurchase";
+import CreatePurchase from "./components/createPurchase";
+import { v4 as uuidV4 } from "uuid";
+
 interface StringValidator {
   isAcceptable(s: string): boolean;
 }
@@ -30,14 +33,15 @@ export type RawNote = {
 
 export type RawNoteData = {
   title: string;
-  markdown: string;
+  total: string;
   tagsIds: string[];
 };
 
 export type NoteData = {
   title: string;
-  markdown: string;
+  total: string;
   tags: Tag[];
+  image: string;
 };
 
 function App() {
@@ -45,23 +49,12 @@ function App() {
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
-  useEffect(() => {
-    setNotes([
-      {
-        id: "0",
-        title: "test",
-        markdown: "",
-        tagsIds: ["0"],
-      },
+  const onCreateNote = ({ tags, ...data }: NoteData) => {
+    setNotes((prevNotes) => [
+      ...prevNotes,
+      { ...data, id: uuidV4(), tagsIds: tags.map((tag) => tag.id) },
     ]);
-
-    setTags([
-      {
-        id: "0",
-        label: "transport",
-      },
-    ]);
-  }, []);
+  };
 
   function onAddTag(tag: Tag) {
     setTags((prev) => [...prev, tag]);
@@ -82,7 +75,7 @@ function App() {
           path="/"
           element={
             <MonthlyList
-              // availableTags={tags}
+              availableTags={tags}
               notes={notesWithTags}
               {...{ selectedTags }}
             />
@@ -109,6 +102,16 @@ function App() {
             }
           />  */}
         </Route>
+        <Route
+          path="/new"
+          element={
+            <CreatePurchase
+              onSubmit={onCreateNote}
+              {...{ onAddTag, selectedTags, setSelectedTags }}
+              availableTags={tags}
+            />
+          }
+        />
       </Routes>
     </Container>
   );

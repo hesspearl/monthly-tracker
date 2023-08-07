@@ -13,9 +13,11 @@ function MonthlyRow({ current }: { current?: boolean }) {
         <Image
           src={edit}
           role="button"
+          width={35}
+          height={35}
           className="position-absolute top-0 start-0"
         />
-        <h5 className={`p-2 `}>June/2023</h5>
+        <h5 className={`p-2 mt-2 ms-2`}>June/2023</h5>
       </div>
 
       <div className={`pt-2 `}>

@@ -8,7 +8,8 @@ import DailyRow from "./dailyRow";
 import edit from "../../assets/setting.svg";
 import EditTagModal from "../EditTagModal";
 import { Dispatch, SetStateAction, useState } from "react";
-import { Tag } from "../../App";
+import { Note, Tag } from "../../App";
+import { Months } from "../../utils/days";
 
 interface MonthlyPurchaseProps {
   onDelete: (id: string) => void;
@@ -16,6 +17,7 @@ interface MonthlyPurchaseProps {
   setSelectedTags: Dispatch<SetStateAction<Tag[]>>;
   onAddTag: (tag: Tag) => void;
   availableTags: Tag[];
+  notes: Note[];
 }
 
 function MonthlyPurchase({
@@ -24,8 +26,14 @@ function MonthlyPurchase({
   setSelectedTags,
   onAddTag,
   availableTags,
+  notes,
 }: MonthlyPurchaseProps) {
   const note = useNote();
+  const date = new Date();
+  const day = date.getDate();
+  const month = date.getMonth();
+  const theDay = date.getDay();
+  const year = date.getFullYear();
   const navigate = useNavigate();
   const [editTagsModalIsOpen, setEditTagsModalIsOpen] =
     useState<boolean>(false);
@@ -66,9 +74,9 @@ function MonthlyPurchase({
       </Row>
       <div className="d-flex justify-content-center mb-4">
         <Stack gap={3} className={`  p-3 ${style.container}`}>
-          <MonthlyRow />
-          <DailyRow />
-          <MonthlyRow current />
+          {/* <MonthlyRow />
+          <DailyRow /> */}
+          <MonthlyRow current month={Months[month]} year={year} />
         </Stack>
       </div>
       <EditTagModal

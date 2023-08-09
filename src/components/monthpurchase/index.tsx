@@ -8,8 +8,8 @@ import DailyRow from "./dailyRow";
 import edit from "../../assets/setting.svg";
 import EditTagModal from "../EditTagModal";
 import { Dispatch, SetStateAction, useState } from "react";
-import { Note, Tag } from "../../App";
-import { Months } from "../../utils/days";
+import { Note, NoteData, Tag } from "../../App";
+import { Months, month, year } from "../../utils/days";
 
 interface MonthlyPurchaseProps {
   onDelete: (id: string) => void;
@@ -18,6 +18,9 @@ interface MonthlyPurchaseProps {
   onAddTag: (tag: Tag) => void;
   availableTags: Tag[];
   notes: Note[];
+  onUpdate: (id: string, data: NoteData) => void;
+  onUpdateTag: (id: string, label: string) => void;
+  onDeleteNoteTag: (id: string, tagId: string) => void;
 }
 
 function MonthlyPurchase({
@@ -27,19 +30,20 @@ function MonthlyPurchase({
   onAddTag,
   availableTags,
   notes,
+  onUpdate,
+  onUpdateTag,
+  onDeleteNoteTag,
 }: MonthlyPurchaseProps) {
   const note = useNote();
-  const date = new Date();
-  const day = date.getDate();
-  const month = date.getMonth();
-  const theDay = date.getDay();
-  const year = date.getFullYear();
   const navigate = useNavigate();
   const [editTagsModalIsOpen, setEditTagsModalIsOpen] =
     useState<boolean>(false);
 
   return (
-    <>
+    <Stack
+      className="d-flex justify-content-between "
+      style={{ minWidth: 300 }}
+    >
       <Row className="align-items-center mb-4">
         <Col>
           <h1>Expends Target :{note.title}</h1>
@@ -72,20 +76,44 @@ function MonthlyPurchase({
           </Stack>
         </Col>
       </Row>
-      <div className="d-flex justify-content-center mb-4">
+      <div className="d-flex justify-content-center  ">
         <Stack gap={3} className={`  p-3 ${style.container}`}>
           {/* <MonthlyRow />
-          <DailyRow /> */}
-          <MonthlyRow current month={Months[month]} year={year} />
+           */}
+          {note.purchases.map((purchase) => {
+            return (
+              <>
+                <MonthlyRow
+                  key={purchase.id}
+                  current={purchase.month === Months[month]}
+                  {...purchase}
+                />
+                {purchase.expends.map((expend) => (
+                  <DailyRow key={expend.id} {...expend} />
+                ))}
+              </>
+            );
+          })}
         </Stack>
       </div>
       <EditTagModal
-        {...{ selectedTags, setSelectedTags, onAddTag }}
+        {...{ selectedTags, setSelectedTags, onAddTag, onUpdateTag }}
+        expendTags={note.tags}
         availableTags={availableTags}
         show={editTagsModalIsOpen}
+        onDeleteTag={(id) => onDeleteNoteTag(note.id, id)}
+        onUpdate={() =>
+          onUpdate(note.id, { ...note, tags: [...note.tags, ...selectedTags] })
+        }
         handleClose={() => setEditTagsModalIsOpen(false)}
       />
-    </>
+      <Button
+        className="border rounded-circle position-absolute bottom-0 end-0 m-4 "
+        style={{ width: 80, height: 80, backgroundColor: "#D9D9D9" }}
+      >
+        <h1>+</h1>
+      </Button>
+    </Stack>
   );
 }
 

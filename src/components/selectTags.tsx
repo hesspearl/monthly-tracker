@@ -15,9 +15,11 @@ function SelectTags({
   selectedTags,
   onAddTag,
   availableTags,
+  ...props
 }: SelectTagProps) {
   return (
     <CreatableReactSelect
+      {...props}
       isMulti
       options={availableTags.map((tag) => ({
         label: tag.label,

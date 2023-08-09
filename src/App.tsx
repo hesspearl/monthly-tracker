@@ -27,21 +27,37 @@ export type Tag = {
 export type Note = {
   id: string;
 } & NoteData;
+
 export type RawNote = {
   id: string;
 } & RawNoteData;
 
-export type RawNoteData = {
+export type commonNoteData = {
   title: string;
   total: string;
-  tagsIds: string[];
+  image: string;
+  purchases: Purchase[];
 };
+export type RawNoteData = {
+  tagsIds: string[];
+} & commonNoteData;
 
 export type NoteData = {
-  title: string;
-  total: string;
   tags: Tag[];
-  image: string;
+} & commonNoteData;
+
+export type Purchase = {
+  id: string;
+  month: string;
+  year: number;
+  total: string;
+  remain: string;
+  expends: {
+    id: string;
+    date: number;
+    day: string;
+    amount: number;
+  }[];
 };
 
 function App() {
@@ -56,6 +72,43 @@ function App() {
     ]);
   };
 
+  function onUpdate(id: string, { tags, ...data }: NoteData): void {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) => {
+        if (note.id === id) {
+          return { ...note, ...data, tagsIds: tags.map((tag) => tag.id) };
+        } else {
+          return note;
+        }
+      })
+    );
+  }
+  const onUpdateTag = (id: string, label: string) => {
+    setTags((prevTags) =>
+      prevTags.map((tag) => {
+        if (tag.id === id) {
+          return { ...tag, label };
+        } else {
+          return tag;
+        }
+      })
+    );
+  };
+
+  function onDeleteNoteTag(id: string, tagId: string): void {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) => {
+        if (note.id === id) {
+          return {
+            ...note,
+            tagsIds: note.tagsIds.filter((tag) => tag !== tagId),
+          };
+        } else {
+          return note;
+        }
+      })
+    );
+  }
   function onAddTag(tag: Tag) {
     setTags((prev) => [...prev, tag]);
   }
@@ -69,7 +122,7 @@ function App() {
     [notes, tags]
   );
   return (
-    <Container className="my-4">
+    <Container className="mt-4">
       <Routes>
         <Route
           path="/"
@@ -77,7 +130,8 @@ function App() {
             <MonthlyList
               availableTags={tags}
               notes={notesWithTags}
-              {...{ selectedTags }}
+              onSubmit={onCreateNote}
+              {...{ onAddTag, selectedTags, setSelectedTags }}
             />
           }
         />
@@ -87,7 +141,15 @@ function App() {
             element={
               <MonthlyPurchase
                 availableTags={tags}
-                {...{ onAddTag, selectedTags, setSelectedTags }}
+                notes={notesWithTags}
+                {...{
+                  onAddTag,
+                  selectedTags,
+                  setSelectedTags,
+                  onUpdateTag,
+                  onUpdate,
+                  onDeleteNoteTag,
+                }}
               />
             }
           />
@@ -102,7 +164,7 @@ function App() {
             }
           />  */}
         </Route>
-        <Route
+        {/* <Route
           path="/new"
           element={
             <CreatePurchase
@@ -111,7 +173,7 @@ function App() {
               availableTags={tags}
             />
           }
-        />
+        /> */}
       </Routes>
     </Container>
   );

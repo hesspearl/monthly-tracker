@@ -1,15 +1,11 @@
-import { Tag } from "../../App";
+import { Note, Tag } from "../../App";
 import { Badge, Card, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styles from "./monthlyCard.module.css";
 import CarImage from "../../assets/checklistwithcars.jpg";
-export interface MonthlyCardProps {
-  id: string;
-  title: string;
-  tags: Tag[];
-  total: string;
-  image: string;
-}
+
+export type MonthlyCardProps = Note;
+
 function MonthlyCard({ id, title, tags, total, image }: MonthlyCardProps) {
   return (
     <Card

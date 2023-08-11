@@ -9,7 +9,7 @@ import edit from "../../assets/setting.svg";
 import EditTagModal from "../EditTagModal";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Note, NoteData, Tag } from "../../App";
-import { Months, month, year } from "../../utils/days";
+import { getDate } from "../../utils/days";
 
 interface MonthlyPurchaseProps {
   onDelete: (id: string) => void;
@@ -38,6 +38,7 @@ function MonthlyPurchase({
   const navigate = useNavigate();
   const [editTagsModalIsOpen, setEditTagsModalIsOpen] =
     useState<boolean>(false);
+  const { currentMonth } = getDate(new Date());
 
   return (
     <Stack
@@ -85,7 +86,7 @@ function MonthlyPurchase({
               <>
                 <MonthlyRow
                   key={purchase.id}
-                  current={purchase.month === Months[month]}
+                  current={purchase.month === currentMonth}
                   {...purchase}
                 />
                 {purchase.expends.map((expend) => (
@@ -110,6 +111,7 @@ function MonthlyPurchase({
       <Button
         className="border rounded-circle position-absolute bottom-0 end-0 m-4 "
         style={{ width: 80, height: 80, backgroundColor: "#D9D9D9" }}
+        onClick={() => navigate(`/${note.id}/new`)}
       >
         <h1>+</h1>
       </Button>

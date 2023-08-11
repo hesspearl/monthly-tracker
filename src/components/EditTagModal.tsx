@@ -24,7 +24,6 @@ function EditTagModal({
   expendTags,
   onUpdate,
 }: EditTagModalProps) {
-  console.log({ selectedTags });
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>

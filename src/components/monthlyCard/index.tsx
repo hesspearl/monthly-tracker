@@ -14,9 +14,12 @@ function MonthlyCard({ id, title, tags, total, image }: MonthlyCardProps) {
       className={` text-reset text-decoration-none  ${styles.card}`}
     >
       <Card.Img variant="top" src={image} style={{ height: 150 }} />
-      <Card.Body className="rounded shadow" style={{ height: 100 }}>
+      <Card.Body className="rounded shadow" style={{ height: 150 }}>
         <Stack gap={2} className=" h-100">
-          <Stack direction="horizontal" className="justify-content-between ">
+          <Stack
+            direction="horizontal"
+            className="justify-content-between align-items-center "
+          >
             <span className="fs-4"> {title} </span>
 
             <Badge bg="secondary" pill className="mt-1 border">
@@ -26,11 +29,11 @@ function MonthlyCard({ id, title, tags, total, image }: MonthlyCardProps) {
 
           {tags.length > 0 && (
             <Stack
-              gap={4}
+              gap={2}
               direction="horizontal"
               className="justify-content-center flex-wrap "
             >
-              {tags.map((tag) => (
+              {tags.slice(0, 6).map((tag) => (
                 <Badge
                   key={tag.id}
                   bg="secondary"

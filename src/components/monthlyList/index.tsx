@@ -7,7 +7,7 @@ import MonthlyCard, { MonthlyCardProps } from "../monthlyCard";
 import FormInput from "../formInput";
 import CreatePurchase, { CreatePurchaseProps } from "../createPurchase";
 import styles from "./monthlyList.module.css";
-import { Months, month } from "../../utils/days";
+import { getDate } from "../../utils/days";
 
 export type MonthlyListProps = {
   notes: MonthlyCardProps[];
@@ -27,6 +27,7 @@ function MonthlyList({
 }: MonthlyListProps) {
   const [text, setText] = useState<string>("");
   const [editModalIsOpen, setEditModalIsOpen] = useState<boolean>(false);
+  const { currentMonth } = getDate(new Date());
 
   const filteredNotes = useMemo(
     () =>
@@ -43,10 +44,50 @@ function MonthlyList({
     [text, notes]
   );
 
+  // const highlithedWeeks = [
+  //   [
+  //     { weekIndex: 2, startDayIndex: 3, endDayIndex: 6 },
+  //     { weekIndex: 3, startDayIndex: 0, endDayIndex: 6 },
+  //   ],
+  //   [
+  //     { weekIndex: 0, startDayIndex: 3, endDayIndex: 6 },
+  //     { weekIndex: 1, startDayIndex: 0, endDayIndex: 2 },
+  //   ],
+  //   [{ weekIndex: 1, startDayIndex: 3, endDayIndex: 6 }],
+  // ];
+
+  // const newHighlitWeek: typeof highlithedWeeks = highlithedWeeks
+  //   .map((computedWeeks, index) => {
+  //     const nextWeeks = highlithedWeeks[highlithedWeeks.length - Math.min(index + 1, )];
+  //     console.log({ nextWeeks });
+  //     let isOverlapped;
+  //     if (!nextWeeks) return [];
+  //     for (const nextWeek of nextWeeks) {
+  //       isOverlapped = computedWeeks.some(
+  //         (week) =>
+  //           week.weekIndex === nextWeek.weekIndex &&
+  //           week.endDayIndex >= nextWeek.startDayIndex
+  //       );
+  //     }
+
+  //     if (isOverlapped) return [...computedWeeks, ...nextWeeks];
+  //     return computedWeeks;
+  //   })
+  //   .filter((value) => !!value);
+
+  // const sanitizedHighlightedWeeks = newHighlitWeek.reduce(
+  //   (sanitizedHighlightedWeeksAcc, currentWeeks) => {
+  //     return [...sanitizedHighlightedWeeksAcc, currentWeeks];
+  //   },
+  //   [] as typeof highlithedWeeks
+  // );
+
+  // console.log({ sanitizedHighlightedWeeks });
+
   return (
     <>
       <PageTitle
-        title={`Mϒ  Γist  ,${Months[month]}`}
+        title={`Mϒ  Γist  ,${currentMonth}`}
         withButtons
         button1="Create"
         onButtonClick={() => setEditModalIsOpen(true)}

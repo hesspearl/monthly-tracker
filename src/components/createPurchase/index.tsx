@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { images } from "../../utils/images";
 import { v4 as uuidV4 } from "uuid";
-import { Months, month, year } from "../../utils/days";
+import { getDate } from "../../utils/days";
 
 export interface CreatePurchaseProps extends SelectTagProps {
   onSubmit: (data: NoteData) => void;
@@ -26,7 +26,7 @@ function CreatePurchase({
     image: images[0],
     purchases: [],
   });
-
+  const { year, currentMonth } = getDate(new Date());
   const [openModal, setOpenModal] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -39,7 +39,7 @@ function CreatePurchase({
       purchases: [
         {
           id: uuidV4(),
-          month: Months[month],
+          month: currentMonth,
           year,
           total: e.target.value,
           remain: e.target.value,

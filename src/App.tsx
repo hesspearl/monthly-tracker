@@ -8,6 +8,7 @@ import NoteLayout from "./components/monthlyPageLayout";
 import MonthlyPurchase from "./components/monthpurchase";
 import CreatePurchase from "./components/createPurchase";
 import { v4 as uuidV4 } from "uuid";
+import CreateNewPurchase from "./components/createNewPurchase";
 
 interface StringValidator {
   isAcceptable(s: string): boolean;
@@ -153,6 +154,7 @@ function App() {
               />
             }
           />
+          <Route path="new" element={<CreateNewPurchase />} />
           {/* <Route
             path="edit"
             element={
@@ -164,16 +166,6 @@ function App() {
             }
           />  */}
         </Route>
-        {/* <Route
-          path="/new"
-          element={
-            <CreatePurchase
-              onSubmit={onCreateNote}
-              {...{ onAddTag, selectedTags, setSelectedTags }}
-              availableTags={tags}
-            />
-          }
-        /> */}
       </Routes>
     </Container>
   );

@@ -19,3 +19,29 @@ border-radius: 10px;
     border-radius: 10px;
     border:1px solid black
     }
+
+    .smallButtonStyle{
+        transform: translateY(150%);
+        transition: all 0.2s ease-out;
+        /* position: absolute; */
+        
+        
+    }
+    .smallButtonStyle2{
+        transform: translateY(250%);
+        transition: all 0.3s ease-out;
+        /* position: absolute; */
+        
+        
+    }
+   .transition1{
+    position: none;
+    transition: all 0.2s ease-in-out;
+    transform: translateY(-20%);
+   }
+   
+   .transition2{
+    position: none;
+    transition: all 0.3s ease-in-out;
+    transform: translateY(-30%);
+   }

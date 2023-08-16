@@ -1,4 +1,13 @@
-import { Badge, Button, Col, Image, Row, Stack } from "react-bootstrap";
+import {
+  Badge,
+  Button,
+  ButtonGroup,
+  Col,
+  Image,
+  ListGroup,
+  Row,
+  Stack,
+} from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { useNote } from "../../hook/useNote";
@@ -10,7 +19,9 @@ import EditTagModal from "../EditTagModal";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Note, NoteData, Tag } from "../../App";
 import { getDate } from "../../utils/days";
-
+import cart from "../../assets/cart-plus.svg";
+import calender from "../../assets/calendar-alt.svg";
+import { BigButton, SmallButton } from "../button";
 interface MonthlyPurchaseProps {
   onDelete: (id: string) => void;
   selectedTags: Tag[];
@@ -38,6 +49,7 @@ function MonthlyPurchase({
   const navigate = useNavigate();
   const [editTagsModalIsOpen, setEditTagsModalIsOpen] =
     useState<boolean>(false);
+  const [openToggle, setOpenToggle] = useState<boolean>(false);
   const { currentMonth } = getDate(new Date());
 
   return (
@@ -108,13 +120,36 @@ function MonthlyPurchase({
         }
         handleClose={() => setEditTagsModalIsOpen(false)}
       />
-      <Button
-        className="border rounded-circle position-absolute bottom-0 end-0 m-4 "
-        style={{ width: 80, height: 80, backgroundColor: "#D9D9D9" }}
-        onClick={() => navigate(`/${note.id}/new`)}
+      <ButtonGroup
+        vertical
+        className="position-absolute bottom-0 end-0 m-4 align-items-center"
       >
-        <h1>+</h1>
-      </Button>
+        <>
+          <SmallButton
+            variant="secondary"
+            image={calender}
+            smallButtonStyle={
+              openToggle ? style.transition2 : style.smallButtonStyle2
+            }
+          />
+          <SmallButton
+            variant="danger"
+            image={cart}
+            smallButtonStyle={
+              openToggle ? style.transition1 : style.smallButtonStyle
+            }
+          />
+        </>
+
+        <BigButton
+          onClick={() => {
+            setOpenToggle((toggle) => !toggle);
+          }}
+          bigButtonStyle={style.bigButtonStyle}
+        >
+          <h1>{openToggle ? "×" : "+"}</h1>
+        </BigButton>
+      </ButtonGroup>
     </Stack>
   );
 }

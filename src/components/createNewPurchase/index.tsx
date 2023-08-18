@@ -1,7 +1,7 @@
 import { useState } from "react";
 import FormInput from "../formInput";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+//import Calendar from "react-calendar";
+//import "react-calendar/dist/Calendar.css";
 import { Day, Months, getDate } from "../../utils/days";
 import { Button, Form, Stack } from "react-bootstrap";
 import PageTitle from "../pageTitle";
@@ -66,11 +66,11 @@ function CreateNewPurchase() {
       <PageTitle title={`Edit  : ${note.title}`} />
       <PageTitle title={`Total : $${note.total}`} />
       <Stack gap={5} className=" align-items-center justify-content-center">
-        <Calendar
+        {/* <Calendar
           onClickMonth={(value) => console.log(value)}
           onChange={(value) => onChange(value as ValuePiece)}
           value={value}
-        />
+        /> */}
         {/* <FormInput
           label="Total"
           placeholder="Total"

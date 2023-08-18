@@ -21,14 +21,14 @@ border-radius: 10px;
     }
 
     .smallButtonStyle{
-        transform: translateY(150%);
+        transform: translateY(120%);
         transition: all 0.2s ease-out;
         /* position: absolute; */
         
         
     }
     .smallButtonStyle2{
-        transform: translateY(250%);
+        transform: translateY(220%);
         transition: all 0.3s ease-out;
         /* position: absolute; */
         

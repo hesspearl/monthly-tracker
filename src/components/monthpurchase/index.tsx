@@ -52,6 +52,7 @@ function MonthlyPurchase({
   const [openToggle, setOpenToggle] = useState<boolean>(false);
   const { currentMonth } = getDate(new Date());
 
+  console.log({ selectedTags });
   return (
     <Stack
       className="d-flex justify-content-between "
@@ -91,8 +92,6 @@ function MonthlyPurchase({
       </Row>
       <div className="d-flex justify-content-center  ">
         <Stack gap={3} className={`  p-3 ${style.container}`}>
-          {/* <MonthlyRow />
-           */}
           {note.purchases.map((purchase) => {
             return (
               <>
@@ -115,9 +114,12 @@ function MonthlyPurchase({
         availableTags={availableTags}
         show={editTagsModalIsOpen}
         onDeleteTag={(id) => onDeleteNoteTag(note.id, id)}
-        onUpdate={() =>
+        onUpdateExpendTags={() =>
           onUpdate(note.id, { ...note, tags: [...note.tags, ...selectedTags] })
         }
+        onUpdateExpendTagsOrder={(orderedTags: Tag[]) => {
+          onUpdate(note.id, { ...note, tags: orderedTags });
+        }}
         handleClose={() => setEditTagsModalIsOpen(false)}
       />
       <ButtonGroup

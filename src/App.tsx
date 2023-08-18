@@ -62,22 +62,19 @@ export type Purchase = {
 };
 
 function App() {
-  const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", []);
+  const [notes, setNotes] = useLocalStorage<Note[]>("NOTES", []);
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
-  const onCreateNote = ({ tags, ...data }: NoteData) => {
-    setNotes((prevNotes) => [
-      ...prevNotes,
-      { ...data, id: uuidV4(), tagsIds: tags.map((tag) => tag.id) },
-    ]);
+  const onCreateNote = ({ ...data }: NoteData) => {
+    setNotes((prevNotes) => [...prevNotes, { ...data, id: uuidV4() }]);
   };
 
-  function onUpdate(id: string, { tags, ...data }: NoteData): void {
+  function onUpdate(id: string, { ...data }: NoteData): void {
     setNotes((prevNotes) =>
       prevNotes.map((note) => {
         if (note.id === id) {
-          return { ...note, ...data, tagsIds: tags.map((tag) => tag.id) };
+          return { ...note, ...data };
         } else {
           return note;
         }
@@ -102,7 +99,6 @@ function App() {
         if (note.id === id) {
           return {
             ...note,
-            tagsIds: note.tagsIds.filter((tag) => tag !== tagId),
           };
         } else {
           return note;
@@ -118,10 +114,10 @@ function App() {
     () =>
       notes.map((note) => ({
         ...note,
-        tags: tags.filter((tag) => note.tagsIds.includes(tag.id)),
       })),
-    [notes, tags]
+    [notes]
   );
+
   return (
     <Container className="mt-4">
       <Routes>

@@ -27,7 +27,7 @@ function CreatePurchase({
     purchases: [],
   });
   const { year, currentMonth } = getDate(new Date());
-  const [openModal, setOpenModal] = useState<boolean>(false);
+
   const navigate = useNavigate();
 
   const onChangeTotal = (

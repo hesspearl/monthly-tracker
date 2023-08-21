@@ -35,7 +35,7 @@ function MonthlyList({
         (note) =>
           !text.length ||
           note.title.toLowerCase().includes(text.toLocaleLowerCase()) ||
-          note.tags.some((noteTag) =>
+          note.tags?.some((noteTag) =>
             noteTag?.label
               .toLocaleLowerCase()
               .includes(text.toLocaleLowerCase())

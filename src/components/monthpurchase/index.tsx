@@ -3,6 +3,7 @@ import {
   Button,
   ButtonGroup,
   Col,
+  Form,
   Image,
   ListGroup,
   Row,
@@ -49,16 +50,46 @@ function MonthlyPurchase({
   const navigate = useNavigate();
   const [editTagsModalIsOpen, setEditTagsModalIsOpen] =
     useState<boolean>(false);
+  const [editTitle, setEditTitle] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>(() => note.title);
   const [openToggle, setOpenToggle] = useState<boolean>(false);
   const { currentMonth } = getDate(new Date());
 
+  const editTitleHandler = () => {
+    if (!editTitle) {
+      setEditTitle(true);
+      return;
+    }
+
+    onUpdate(note.id, { ...note, title });
+    setEditTitle(false);
+  };
+
   return (
     <Stack
-      className={`d-flex justify-content-between px-4 py-2 position-relative ${style.page} `}
+      className={`d-flex justify-content-between  position-relative ${style.page} `}
     >
-      <Row className="align-items-center mb-4" style={{}}>
+      <Row className="align-items-center px-4 mb-4" style={{}}>
         <Col>
-          <h1>Expends Target :{note.title}</h1>
+          <Stack gap={1} direction="horizontal" className=" flex-wrap ">
+            <h1>Expends Target :</h1>
+            {!editTitle ? (
+              <h1>{note.title}</h1>
+            ) : (
+              <Form>
+                <Form.Control
+                  required
+                  onChange={(e) => setTitle(e.target.value)}
+                  value={title}
+                  className={"ms-5"}
+                  //style={{ maxWidth: inputMaxWidth }}
+                  //  placeholder={placeholder}
+                />
+              </Form>
+            )}
+            <Image src={edit} role="button" onClick={editTitleHandler} />
+          </Stack>
+
           {note?.tags?.length > 0 && (
             <Stack gap={1} direction="horizontal" className=" flex-wrap ">
               <h1>Tags :</h1>

@@ -16,10 +16,9 @@ export function SmallButton({
 }) {
   return (
     <Button
-      variant={variant}
       bsPrefix={smallButtonStyle}
       className={`border border-light-subtle rounded-circle d-flex align-items-center justify-content-center  mb-1  shadow  `}
-      style={{ width: 50, height: 50, backgroundColor: "red" }}
+      style={{ width: 50, height: 50, backgroundColor: variant }}
       onClick={onClick}
     >
       {image ? <Image src={image} width={20} height={20} /> : text}

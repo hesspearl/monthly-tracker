@@ -1,8 +1,20 @@
+.page{
+    width: 100%;
+    min-width: 300px;
+    background: linear-gradient(
+    to top,
+    white 0%,
+    white 60%,
+    #7976FF 40%,
+    #7976FF 100%
+  );
+}
+
 .container{
-    background-color: #B6B6B6B6;
+    background-color: #bababa;
     max-width: 600px;
     min-width: 300px;
-    border-radius: 15px;
+    border-radius: 15px 15px 0px 0px;
    height: 700px;
 overflow-y: auto;
 }

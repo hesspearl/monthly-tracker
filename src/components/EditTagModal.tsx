@@ -86,7 +86,7 @@ function EditTagModal({
               setSelectedTags,
               onAddTag,
               availableTags: availableTags.filter((tag) =>
-                expendTags.every((exTag) => tag.id !== exTag.id)
+                expendTags?.every((exTag) => tag.id !== exTag.id)
               ),
             }}
           />

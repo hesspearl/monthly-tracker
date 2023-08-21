@@ -52,16 +52,14 @@ function MonthlyPurchase({
   const [openToggle, setOpenToggle] = useState<boolean>(false);
   const { currentMonth } = getDate(new Date());
 
-  console.log({ selectedTags });
   return (
     <Stack
-      className="d-flex justify-content-between "
-      style={{ minWidth: 300 }}
+      className={`d-flex justify-content-between px-4 py-2 position-relative ${style.page} `}
     >
-      <Row className="align-items-center mb-4">
+      <Row className="align-items-center mb-4" style={{}}>
         <Col>
           <h1>Expends Target :{note.title}</h1>
-          {note.tags.length > 0 && (
+          {note?.tags?.length > 0 && (
             <Stack gap={1} direction="horizontal" className=" flex-wrap ">
               <h1>Tags :</h1>
               {note.tags.map((tag) => (
@@ -85,7 +83,7 @@ function MonthlyPurchase({
         <Col xs="auto">
           <Stack gap={2} direction="horizontal">
             <Link to={`/`}>
-              <Button variant="outline-secondary">Back</Button>
+              <Button>Back</Button>
             </Link>
           </Stack>
         </Col>
@@ -128,14 +126,14 @@ function MonthlyPurchase({
       >
         <>
           <SmallButton
-            variant="secondary"
+            variant="black"
             image={calender}
             smallButtonStyle={
               openToggle ? style.transition2 : style.smallButtonStyle2
             }
           />
           <SmallButton
-            variant="danger"
+            variant="red"
             image={cart}
             smallButtonStyle={
               openToggle ? style.transition1 : style.smallButtonStyle

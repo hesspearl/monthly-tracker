@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import PageTitle from "../pageTitle";
-import { Row, Form, Col, Modal } from "react-bootstrap";
+import { Row, Form, Col, Modal, Container } from "react-bootstrap";
 //import NotesInputs from "./NotesInputs";
 
 import MonthlyCard, { MonthlyCardProps } from "../monthlyCard";
@@ -85,7 +85,7 @@ function MonthlyList({
   // console.log({ sanitizedHighlightedWeeks });
 
   return (
-    <>
+    <Container className="mt-4">
       <PageTitle
         title={`Mϒ  Γist  ,${currentMonth}`}
         withButtons
@@ -131,7 +131,7 @@ function MonthlyList({
         handleClose={() => setEditTagsModalIsOpen(false)}
         {...{ availableTags, onDeleteTag, onUpdateTag }}
       /> */}
-    </>
+    </Container>
   );
 }
 

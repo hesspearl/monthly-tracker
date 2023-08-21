@@ -119,7 +119,7 @@ function App() {
   );
 
   return (
-    <Container className="mt-4">
+    <>
       <Routes>
         <Route
           path="/"
@@ -163,7 +163,7 @@ function App() {
           />  */}
         </Route>
       </Routes>
-    </Container>
+    </>
   );
 }
 

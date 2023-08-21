@@ -27,7 +27,7 @@ function MonthlyCard({ id, title, tags, total, image }: MonthlyCardProps) {
             </Badge>
           </Stack>
 
-          {tags.length > 0 && (
+          {tags?.length > 0 && (
             <Stack
               gap={2}
               direction="horizontal"

@@ -30,16 +30,18 @@ export const BigButton = ({
   children,
   onClick,
   bigButtonStyle,
+  variant,
 }: {
   children: ReactElement;
   onClick: () => void;
   bigButtonStyle?: string;
+  variant?: string;
 }) => {
   return (
     <Button
       bsPrefix={bigButtonStyle}
       className="border border-light-subtle rounded-circle d-flex align-items-center justify-content-center mx-2 shadow  "
-      style={{ width: 80, height: 80, backgroundColor: "#D9D9D9" }}
+      style={{ width: 80, height: 80, backgroundColor: variant ?? "#D9D9D9" }}
       onClick={onClick}
     >
       {children}

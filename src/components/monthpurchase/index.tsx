@@ -3,6 +3,7 @@ import {
   Button,
   ButtonGroup,
   Col,
+  Dropdown,
   Form,
   Image,
   ListGroup,
@@ -17,12 +18,15 @@ import MonthlyRow from "./monthlyRow";
 import DailyRow from "./dailyRow";
 import edit from "../../assets/setting.svg";
 import EditTagModal from "../EditTagModal";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { Note, NoteData, Tag } from "../../App";
-import { getDate } from "../../utils/days";
-import cart from "../../assets/cart-plus.svg";
+import { Day, Months, getDate } from "../../utils/days";
 import calender from "../../assets/calendar-alt.svg";
 import { BigButton, SmallButton } from "../button";
+import check from "../../assets/check.svg";
+import pencil from "../../assets/pencil-alt.svg";
+import cart from "../../assets/cart-plus.svg";
+
 interface MonthlyPurchaseProps {
   onDelete: (id: string) => void;
   selectedTags: Tag[];
@@ -47,13 +51,24 @@ function MonthlyPurchase({
   onDeleteNoteTag,
 }: MonthlyPurchaseProps) {
   const note = useNote();
+  const {
+    currentMonth,
+    year: selectedYear,
+    month: selectedDateOfMonth,
+  } = getDate(new Date());
   const navigate = useNavigate();
   const [editTagsModalIsOpen, setEditTagsModalIsOpen] =
     useState<boolean>(false);
   const [editTitle, setEditTitle] = useState<boolean>(false);
   const [title, setTitle] = useState<string>(() => note.title);
   const [openToggle, setOpenToggle] = useState<boolean>(false);
-  const { currentMonth } = getDate(new Date());
+  const [selectedMonth, setSelectedMonth] = useState<{
+    month: number;
+    year: number;
+  }>({
+    month: selectedDateOfMonth,
+    year: selectedYear,
+  });
 
   const editTitleHandler = () => {
     if (!editTitle) {
@@ -64,6 +79,24 @@ function MonthlyPurchase({
     onUpdate(note.id, { ...note, title });
     setEditTitle(false);
   };
+
+  const getAllDaysInMonth = (month: number, year: number) =>
+    Array.from(
+      { length: new Date(year, month, 0).getDate() },
+      (_, i) => new Date(year, month - 1, i + 1)
+    );
+
+  const dateList = useMemo(() => {
+    return getAllDaysInMonth(selectedMonth.month, selectedMonth.year).map(
+      (date) => ` ${date.getDate()} , ${Object.keys(Day)[date.getDay()]}`
+    );
+  }, [selectedMonth]);
+
+  const buttonsList = [
+    { image: pencil, onClick: () => {} },
+    { image: check, onClick: () => {}, color: "#B6B5ED" },
+    { image: cart, onClick: () => {}, color: "red" },
+  ];
 
   return (
     <Stack
@@ -90,10 +123,10 @@ function MonthlyPurchase({
             <Image src={edit} role="button" onClick={editTitleHandler} />
           </Stack>
 
-          {note?.tags?.length > 0 && (
-            <Stack gap={1} direction="horizontal" className=" flex-wrap ">
-              <h1>Tags :</h1>
-              {note.tags.map((tag) => (
+          <Stack gap={1} direction="horizontal" className=" flex-wrap ">
+            <h1>Tags :</h1>
+            {note?.tags?.length > 0 &&
+              note.tags.map((tag) => (
                 <Badge
                   key={tag.id}
                   bg="secondary"
@@ -103,13 +136,12 @@ function MonthlyPurchase({
                 </Badge>
               ))}
 
-              <Image
-                src={edit}
-                role="button"
-                onClick={() => setEditTagsModalIsOpen(true)}
-              />
-            </Stack>
-          )}
+            <Image
+              src={edit}
+              role="button"
+              onClick={() => setEditTagsModalIsOpen(true)}
+            />
+          </Stack>
         </Col>
         <Col xs="auto">
           <Stack gap={2} direction="horizontal">
@@ -135,6 +167,88 @@ function MonthlyPurchase({
               </>
             );
           })}
+
+          <div className={style.bottomSheet}>
+            <Dropdown data-bs-theme="dark" className={style.dropDown}>
+              <Form.Label className="fs-4">Choose a Month</Form.Label>
+              <Dropdown.Toggle
+                id="month"
+                className={style.toggle}
+                variant="secondary"
+              >
+                Choose Month
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu className={style.toggle}>
+                {note.purchases.map((purchase) => (
+                  <Dropdown.Item
+                    key={purchase.id}
+                    onClick={() =>
+                      setSelectedMonth({
+                        month: Number(Months[purchase.month as Months]),
+                        year: purchase.year,
+                      })
+                    }
+                  >
+                    {purchase?.month} / {purchase.year}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+            <Dropdown className={style.dropDown}>
+              <Form.Label className="mt-3 fs-4">Choose a Day</Form.Label>
+              <Dropdown.Toggle
+                className={style.toggle}
+                id="day"
+                variant="secondary"
+              >
+                Choose a Day
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu className={style.toggle} style={{ width: "auto" }}>
+                {dateList.map((date, index) => (
+                  <Dropdown.Item
+                    key={index}
+                    // onClick={
+                    //   () => {}
+                    //   // setSelectedMonth({
+                    //   //   month: Number(Months[purchase.month as Months]),
+                    //   //   year: purchase.year,
+                    //   // })
+                    // }
+                  >
+                    {date}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+              <Form.Group
+                controlId="title"
+                className="d-flex flex-column align-items-center mt-3 fs-4"
+              >
+                <Form.Label>Insert expends amount </Form.Label>
+                <Form.Control
+                  required
+                  //  onChange={(e) => onChange(e)}
+                  //value={value}
+
+                  style={{ width: 373, height: 44, padding: 0 }}
+                  //  placeholder={placeholder}
+                />
+              </Form.Group>
+            </Dropdown>
+            <p className="mt-3 fs-4">Great! what to do now?</p>
+            <div className="d-flex">
+              {buttonsList.map((button, index) => (
+                <BigButton
+                  key={index}
+                  onClick={() => {}}
+                  variant={button?.color}
+                >
+                  <Image src={button.image} width={20} height={20} />
+                </BigButton>
+              ))}
+            </div>
+          </div>
         </Stack>
       </div>
       <EditTagModal
@@ -153,7 +267,7 @@ function MonthlyPurchase({
       />
       <ButtonGroup
         vertical
-        className="position-absolute bottom-0 end-0 m-4 align-items-center"
+        className="position-fixed bottom-0 end-0 m-4 align-items-center"
       >
         <>
           <SmallButton
@@ -176,7 +290,7 @@ function MonthlyPurchase({
           onClick={() => {
             setOpenToggle((toggle) => !toggle);
           }}
-          bigButtonStyle={style.bigButtonStyle}
+          // bigButtonStyle={style.bigButtonStyle}
         >
           <h1>{openToggle ? "×" : "+"}</h1>
         </BigButton>

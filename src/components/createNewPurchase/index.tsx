@@ -20,7 +20,6 @@ function CreateNewPurchase() {
     total: note.total,
   }));
   const { theDay, day: date, month, year } = getDate(value);
-  console.log({ day: Day[theDay], date, theMonth: Months[month], year, note });
 
   const onSaveClick = () => {
     note.purchases.map((puchase) => {
@@ -89,7 +88,7 @@ function CreateNewPurchase() {
           //   onChange={(e) =>
           //     setData((prev) => ({ ...prev, title: e.target.value }))
           //   }
-          value={money.amount}
+          value={money.amount.toString()}
         />
         <Button type="submit" variant="success">
           Save

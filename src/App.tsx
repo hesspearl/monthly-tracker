@@ -9,6 +9,7 @@ import MonthlyPurchase from "./components/monthpurchase";
 import CreatePurchase from "./components/createPurchase";
 import { v4 as uuidV4 } from "uuid";
 import CreateNewPurchase from "./components/createNewPurchase";
+import { Months } from "./utils/days";
 
 interface StringValidator {
   isAcceptable(s: string): boolean;
@@ -35,7 +36,7 @@ export type RawNote = {
 
 export type commonNoteData = {
   title: string;
-  total: string;
+  total: number;
   image: string;
   purchases: Purchase[];
 };
@@ -49,10 +50,10 @@ export type NoteData = {
 
 export type Purchase = {
   id: string;
-  month: string;
+  month: Months | string;
   year: number;
-  total: string;
-  remain: string;
+  total: number;
+  remain: number;
   expends: {
     id: string;
     date: number;

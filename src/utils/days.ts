@@ -1,11 +1,11 @@
 export enum Day {
-  "SUN",
-  "MON",
-  "TUE",
-  "WED",
-  "THU",
-  "FRI",
-  "SAT",
+  Sunday = "SUN",
+  Monday = "MON",
+  Tuesday = "TUE",
+  Wednesday = "WED",
+  Thursday = "THU",
+  Friday = "FRI",
+  Saturday = "SAT",
 }
 
 export enum Months {

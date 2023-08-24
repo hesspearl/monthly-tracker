@@ -10,6 +10,7 @@ interface FormInputProps {
   type?: string;
   placeholder?: string;
   inputMaxWidth?: number | string;
+  direction?: "column" | "row";
 }
 
 function FormInput({
@@ -19,13 +20,15 @@ function FormInput({
   type,
   placeholder,
   inputMaxWidth,
+  direction = "row",
 }: FormInputProps) {
+  const style = {
+    row: "d-flex flex-row align-items-center ",
+    column: "d-flex flex-column align-items-center ",
+  };
   return (
     <>
-      <Form.Group
-        controlId="title"
-        className="d-flex flex-row align-items-center "
-      >
+      <Form.Group controlId="title" className={style[direction]}>
         <Form.Label>{label}</Form.Label>
         <Form.Control
           type={type}

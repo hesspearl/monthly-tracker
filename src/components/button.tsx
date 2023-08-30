@@ -17,6 +17,7 @@ export function SmallButton({
   return (
     <Button
       bsPrefix={smallButtonStyle}
+      variant={variant}
       className={`border border-light-subtle rounded-circle d-flex align-items-center justify-content-center  mb-1  shadow  `}
       style={{ width: 50, height: 50, backgroundColor: variant }}
       onClick={onClick}

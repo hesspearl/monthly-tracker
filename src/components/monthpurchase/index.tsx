@@ -18,14 +18,14 @@ import MonthlyRow from "./monthlyRow";
 import DailyRow from "./dailyRow";
 import edit from "../../assets/setting.svg";
 import EditTagModal from "../EditTagModal";
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
-import { Note, NoteData, Tag } from "../../App";
+import { Dispatch, SetStateAction, useMemo, useState, useRef } from "react";
+import { Note, NoteData, Purchase, Tag } from "../../App";
 import { Day, Months, getDate } from "../../utils/days";
 import calender from "../../assets/calendar-alt.svg";
 import { BigButton, SmallButton } from "../button";
-import check from "../../assets/check.svg";
-import pencil from "../../assets/pencil-alt.svg";
+import { v4 as uuidV4 } from "uuid";
 import cart from "../../assets/cart-plus.svg";
+import BottomSheetContent, { ExpendsProps } from "./bottomSheetContent";
 
 interface MonthlyPurchaseProps {
   onDelete: (id: string) => void;
@@ -51,24 +51,12 @@ function MonthlyPurchase({
   onDeleteNoteTag,
 }: MonthlyPurchaseProps) {
   const note = useNote();
-  const {
-    currentMonth,
-    year: selectedYear,
-    month: selectedDateOfMonth,
-  } = getDate(new Date());
-  const navigate = useNavigate();
+  const { currentMonth } = getDate(new Date());
   const [editTagsModalIsOpen, setEditTagsModalIsOpen] =
     useState<boolean>(false);
   const [editTitle, setEditTitle] = useState<boolean>(false);
   const [title, setTitle] = useState<string>(() => note.title);
   const [openToggle, setOpenToggle] = useState<boolean>(false);
-  const [selectedMonth, setSelectedMonth] = useState<{
-    month: number;
-    year: number;
-  }>({
-    month: selectedDateOfMonth,
-    year: selectedYear,
-  });
 
   const editTitleHandler = () => {
     if (!editTitle) {
@@ -79,25 +67,44 @@ function MonthlyPurchase({
     onUpdate(note.id, { ...note, title });
     setEditTitle(false);
   };
+  const bottomSheetHandler = (height: string, close?: boolean) => {
+    const bottomSheetElement = window.document.getElementById("bottomSheet");
 
-  const getAllDaysInMonth = (month: number, year: number) =>
-    Array.from(
-      { length: new Date(year, month, 0).getDate() },
-      (_, i) => new Date(year, month - 1, i + 1)
-    );
+    if (bottomSheetElement) {
+      if (bottomSheetElement.style.height > height && height === "20%") return;
+      if (close) {
+        bottomSheetElement.style.height = height;
+        bottomSheetElement.style.display = `none`;
+        return;
+      }
+      bottomSheetElement.style.height = height;
+      bottomSheetElement.style.display = `flex`;
+    }
+  };
 
-  const dateList = useMemo(() => {
-    return getAllDaysInMonth(selectedMonth.month, selectedMonth.year).map(
-      (date) => ` ${date.getDate()} , ${Object.keys(Day)[date.getDay()]}`
-    );
-  }, [selectedMonth]);
-
-  const buttonsList = [
-    { image: pencil, onClick: () => {} },
-    { image: check, onClick: () => {}, color: "#B6B5ED" },
-    { image: cart, onClick: () => {}, color: "red" },
-  ];
-
+  const onCreateExpend = (data: ExpendsProps) => {
+    const updatedPurchases = note.purchases.map((purchase) => {
+      if (data.monthId === purchase.id) {
+        const amount = data.amount as number;
+        if (purchase.remain < amount) return purchase;
+        const updateMonthPurchase: Purchase = {
+          ...purchase,
+          remain: purchase.remain - amount,
+          expends: [
+            ...purchase.expends,
+            {
+              id: uuidV4(),
+              date: data.date,
+              day: data.day,
+              amount,
+            },
+          ],
+        };
+        return updateMonthPurchase;
+      } else return purchase;
+    });
+    onUpdate(note.id, { ...note, purchases: updatedPurchases });
+  };
   return (
     <Stack
       className={`d-flex justify-content-between  position-relative ${style.page} `}
@@ -153,104 +160,27 @@ function MonthlyPurchase({
       </Row>
       <div className="d-flex justify-content-center  ">
         <Stack gap={3} className={`  p-3 ${style.container}`}>
-          {note.purchases.map((purchase) => {
-            return (
-              <>
-                <MonthlyRow
-                  key={purchase.id}
-                  current={purchase.month === currentMonth}
-                  {...purchase}
-                />
-                {purchase.expends.map((expend) => (
-                  <DailyRow key={expend.id} {...expend} />
-                ))}
-              </>
-            );
-          })}
-
-          <div className={style.bottomSheet}>
-            <Dropdown data-bs-theme="dark" className={style.dropDown}>
-              <Form.Label className="fs-4">Choose a Month</Form.Label>
-              <Dropdown.Toggle
-                id="month"
-                className={style.toggle}
-                variant="secondary"
-              >
-                Choose Month
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu className={style.toggle}>
-                {note.purchases.map((purchase) => (
-                  <Dropdown.Item
+          <>
+            {note.purchases.map((purchase) => {
+              return (
+                <>
+                  <MonthlyRow
                     key={purchase.id}
-                    onClick={() =>
-                      setSelectedMonth({
-                        month: Number(Months[purchase.month as Months]),
-                        year: purchase.year,
-                      })
-                    }
-                  >
-                    {purchase?.month} / {purchase.year}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown className={style.dropDown}>
-              <Form.Label className="mt-3 fs-4">Choose a Day</Form.Label>
-              <Dropdown.Toggle
-                className={style.toggle}
-                id="day"
-                variant="secondary"
-              >
-                Choose a Day
-              </Dropdown.Toggle>
+                    current={purchase.month === currentMonth}
+                    {...purchase}
+                  />
+                  {purchase.expends.map((expend) => (
+                    <DailyRow key={expend.id} {...expend} />
+                  ))}
+                </>
+              );
+            })}
+          </>
 
-              <Dropdown.Menu className={style.toggle} style={{ width: "auto" }}>
-                {dateList.map((date, index) => (
-                  <Dropdown.Item
-                    key={index}
-                    // onClick={
-                    //   () => {}
-                    //   // setSelectedMonth({
-                    //   //   month: Number(Months[purchase.month as Months]),
-                    //   //   year: purchase.year,
-                    //   // })
-                    // }
-                  >
-                    {date}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-              <Form.Group
-                controlId="title"
-                className="d-flex flex-column align-items-center mt-3 fs-4"
-              >
-                <Form.Label>Insert expends amount </Form.Label>
-                <Form.Control
-                  required
-                  //  onChange={(e) => onChange(e)}
-                  //value={value}
-
-                  style={{ width: 373, height: 44, padding: 0 }}
-                  //  placeholder={placeholder}
-                />
-              </Form.Group>
-            </Dropdown>
-            <p className="mt-3 fs-4">Great! what to do now?</p>
-            <div className="d-flex">
-              {buttonsList.map((button, index) => (
-                <BigButton
-                  key={index}
-                  onClick={() => {}}
-                  variant={button?.color}
-                >
-                  <Image src={button.image} width={20} height={20} />
-                </BigButton>
-              ))}
-            </div>
-          </div>
+          <BottomSheetContent {...{ bottomSheetHandler, onCreateExpend }} />
         </Stack>
       </div>
+
       <EditTagModal
         {...{ selectedTags, setSelectedTags, onAddTag, onUpdateTag }}
         expendTags={note.tags}
@@ -280,6 +210,9 @@ function MonthlyPurchase({
           <SmallButton
             variant="red"
             image={cart}
+            onClick={() => {
+              bottomSheetHandler("25%");
+            }}
             smallButtonStyle={
               openToggle ? style.transition1 : style.smallButtonStyle
             }

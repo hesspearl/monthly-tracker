@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { Container, Toast } from "react-bootstrap";
 import MonthlyList from "./components/monthlyList";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./app.css";
 import { useLocalStorage } from "./hook/useLocalStorage";
 import NoteLayout from "./components/monthlyPageLayout";
 import MonthlyPurchase from "./components/monthpurchase";
@@ -54,14 +55,15 @@ export type Purchase = {
   year: number;
   total: number;
   remain: number;
-  expends: {
-    id: string;
-    date: number;
-    day: string;
-    amount: number;
-  }[];
+  expends: Expends[];
 };
 
+export type Expends = {
+  id: string;
+  date: number;
+  day: string;
+  amount: number;
+};
 function App() {
   const [notes, setNotes] = useLocalStorage<Note[]>("NOTES", []);
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
@@ -72,10 +74,14 @@ function App() {
   };
 
   function onUpdate(id: string, { ...data }: NoteData): void {
+    const updateData: NoteData = {
+      ...data,
+      total: data.purchases[0].remain,
+    };
     setNotes((prevNotes) =>
       prevNotes.map((note) => {
         if (note.id === id) {
-          return { ...note, ...data };
+          return { ...note, ...updateData };
         } else {
           return note;
         }

@@ -2,6 +2,7 @@
     width: 100%;
     min-width: 400px;
     height: inherit;
+    padding-top: 16px;
     background: linear-gradient(
     to top,
     white 0%,
@@ -17,7 +18,7 @@
     min-width: 400px;
     border-radius: 15px 15px 0px 0px;
    height: 700px;
-overflow-y: scroll;
+
 position: relative;
 }
 
@@ -26,7 +27,21 @@ background-color: white;
 border-radius: 10px;
 }
 .dailyContainer{
-    background-color: #E8E8E8
+    
+    background-color: #E8E8E8;
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    cursor: pointer;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+            transition-property: opacity;
+            transition-duration: 500ms;
+            transition-timing-function: ease-in-out;
 }
 .currentMonthContainer{
     background-color: #B6b5ed;

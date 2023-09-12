@@ -25,9 +25,11 @@ export type ExpendsProps = {
 function BottomSheetContent({
   bottomSheetHandler,
   onCreateExpend,
+  onOpenMonthClicked,
 }: {
   bottomSheetHandler: (height: string, close?: boolean) => void;
   onCreateExpend: (data: ExpendsProps) => void;
+  onOpenMonthClicked: (id: string) => void;
 }) {
   const note = useNote();
 
@@ -86,13 +88,21 @@ function BottomSheetContent({
     onClose();
   };
 
+  const onNewPurchase = () => {
+    if (typeof selectedMonth.amount !== "number") {
+      return;
+    }
+    onCreateExpend(selectedMonth);
+    setSelectedMonth((selected) => ({ ...selected, amount: "" }));
+  };
+
   const buttonsList = [
     {
       image: check,
       onClick: onSubmit,
       color: "#B6B5ED",
     },
-    { image: cart, onClick: () => {}, color: "red" },
+    { image: cart, onClick: onNewPurchase, color: "red" },
   ];
 
   const chooseDayHandler = (date: {
@@ -139,6 +149,7 @@ function BottomSheetContent({
           {note.purchases.map((purchase) => (
             <Dropdown.Item
               key={purchase.id}
+              disabled={purchase.remain === 0}
               onClick={() => {
                 setSelectedMonth((selected) => ({
                   ...selected,
@@ -148,7 +159,7 @@ function BottomSheetContent({
                   remain: purchase.remain,
                 }));
                 setSteps(2);
-
+                onOpenMonthClicked(purchase.id);
                 bottomSheetHandler("40%");
               }}
             >

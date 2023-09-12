@@ -15,7 +15,7 @@ import ReactMarkdown from "react-markdown";
 import { useNote } from "../../hook/useNote";
 import style from "./monthPurchase.module.css";
 import MonthlyRow from "./monthlyRow";
-import DailyRow from "./dailyRow";
+import DailyRow, { left } from "./dailyRow";
 import edit from "../../assets/setting.svg";
 import EditTagModal from "../EditTagModal";
 import { Dispatch, SetStateAction, useMemo, useState, useRef } from "react";
@@ -26,6 +26,7 @@ import { BigButton, SmallButton } from "../button";
 import { v4 as uuidV4 } from "uuid";
 import cart from "../../assets/cart-plus.svg";
 import BottomSheetContent, { ExpendsProps } from "./bottomSheetContent";
+import { useSpring, animated } from "@react-spring/web";
 
 interface MonthlyPurchaseProps {
   onDelete: (id: string) => void;
@@ -52,11 +53,19 @@ function MonthlyPurchase({
 }: MonthlyPurchaseProps) {
   const note = useNote();
   const { currentMonth } = getDate(new Date());
+
   const [editTagsModalIsOpen, setEditTagsModalIsOpen] =
     useState<boolean>(false);
   const [editTitle, setEditTitle] = useState<boolean>(false);
   const [title, setTitle] = useState<string>(() => note.title);
   const [openToggle, setOpenToggle] = useState<boolean>(false);
+  const [openMonthPurchase, setOpenMonthPurchases] = useState<{
+    id: string;
+    open: boolean;
+  }>({
+    id: "",
+    open: false,
+  });
 
   const editTitleHandler = () => {
     if (!editTitle) {
@@ -105,9 +114,18 @@ function MonthlyPurchase({
     });
     onUpdate(note.id, { ...note, purchases: updatedPurchases });
   };
+
+  const onOpenMonthClicked = (id: string) => {
+    if (id === openMonthPurchase.id) {
+      setOpenMonthPurchases({ id: "", open: false });
+      return;
+    }
+    setOpenMonthPurchases({ id: id, open: true });
+  };
   return (
     <Stack
       className={`d-flex justify-content-between  position-relative ${style.page} `}
+      // onClick={() => api.set({ x: 0 })}
     >
       <Row className="align-items-center px-4 mb-4" style={{}}>
         <Col>
@@ -159,25 +177,33 @@ function MonthlyPurchase({
         </Col>
       </Row>
       <div className="d-flex justify-content-center  ">
-        <Stack gap={3} className={`  p-3 ${style.container}`}>
-          <>
+        <Stack className={`  p-3 ${style.container}`}>
+          <Stack gap={3} style={{ overflowY: "scroll", overflowX: "hidden" }}>
             {note.purchases.map((purchase) => {
               return (
                 <>
                   <MonthlyRow
+                    onMonthClick={() => onOpenMonthClicked(purchase.id)}
                     key={purchase.id}
                     current={purchase.month === currentMonth}
                     {...purchase}
                   />
-                  {purchase.expends.map((expend) => (
-                    <DailyRow key={expend.id} {...expend} />
-                  ))}
+                  {openMonthPurchase.id === purchase.id &&
+                    openMonthPurchase.open && (
+                      <DailyRow
+                        {...{
+                          expends: purchase.expends,
+                        }}
+                      />
+                    )}
                 </>
               );
             })}
-          </>
+          </Stack>
 
-          <BottomSheetContent {...{ bottomSheetHandler, onCreateExpend }} />
+          <BottomSheetContent
+            {...{ bottomSheetHandler, onCreateExpend, onOpenMonthClicked }}
+          />
         </Stack>
       </div>
 
@@ -211,7 +237,8 @@ function MonthlyPurchase({
             variant="red"
             image={cart}
             onClick={() => {
-              bottomSheetHandler("25%");
+              bottomSheetHandler("25%"),
+                setOpenMonthPurchases({ id: "", open: false });
             }}
             smallButtonStyle={
               openToggle ? style.transition1 : style.smallButtonStyle

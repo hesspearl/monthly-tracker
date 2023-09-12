@@ -1,21 +1,25 @@
 import { Image, Stack } from "react-bootstrap";
 import style from "./monthPurchase.module.css";
 import edit from "../../assets/setting.svg";
+import { Months } from "../../utils/days";
 function MonthlyRow({
   current,
   month,
   year,
   total,
   remain,
+  onMonthClick,
 }: {
   current?: boolean;
-  month: string;
+  month: string | Months;
   year: number;
-  total: string;
-  remain: string;
+  total: number;
+  remain: number;
+  onMonthClick: () => void;
 }) {
   return (
     <Stack
+      onClick={onMonthClick}
       direction="horizontal"
       className={` position-relative justify-content-between  px-3 ${
         current ? style.currentMonthContainer : style.monthContainer

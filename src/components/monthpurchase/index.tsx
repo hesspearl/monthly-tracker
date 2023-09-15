@@ -52,13 +52,19 @@ function MonthlyPurchase({
   onDeleteNoteTag,
 }: MonthlyPurchaseProps) {
   const note = useNote();
-  const { currentMonth } = getDate(new Date());
+  const {
+    currentMonth,
+    year: selectedYear,
+    month: selectedDateOfMonth,
+  } = getDate(new Date());
 
   const [editTagsModalIsOpen, setEditTagsModalIsOpen] =
     useState<boolean>(false);
   const [editTitle, setEditTitle] = useState<boolean>(false);
   const [title, setTitle] = useState<string>(() => note.title);
   const [openToggle, setOpenToggle] = useState<boolean>(false);
+
+  const [steps, setSteps] = useState<number>(0);
   const [openMonthPurchase, setOpenMonthPurchases] = useState<{
     id: string;
     open: boolean;
@@ -66,6 +72,20 @@ function MonthlyPurchase({
     id: "",
     open: false,
   });
+
+  const initialSelectedMonth = {
+    month: selectedDateOfMonth,
+    year: selectedYear,
+    showDate: ``,
+    day: ["", ""] as [string, string],
+    date: 1,
+    amount: "",
+    remain: 0,
+    monthId: "",
+  };
+
+  const [selectedMonth, setSelectedMonth] =
+    useState<ExpendsProps>(initialSelectedMonth);
 
   const editTitleHandler = () => {
     if (!editTitle) {
@@ -121,6 +141,16 @@ function MonthlyPurchase({
       return;
     }
     setOpenMonthPurchases({ id: id, open: true });
+  };
+
+  const openEditBottomSheet = () => {
+    setSteps(3);
+    bottomSheetHandler("75%", false);
+  };
+  const onEditBottomSheetClose = () => {
+    setSteps(0);
+    setSelectedMonth(initialSelectedMonth);
+    bottomSheetHandler("0%", true);
   };
   return (
     <Stack
@@ -193,6 +223,10 @@ function MonthlyPurchase({
                       <DailyRow
                         {...{
                           expends: purchase.expends,
+                          update: openEditBottomSheet,
+                          onClose: onEditBottomSheetClose,
+                          setSelectedMonth,
+                          monthPurchase: purchase,
                         }}
                       />
                     )}
@@ -202,7 +236,16 @@ function MonthlyPurchase({
           </Stack>
 
           <BottomSheetContent
-            {...{ bottomSheetHandler, onCreateExpend, onOpenMonthClicked }}
+            {...{
+              bottomSheetHandler,
+              onCreateExpend,
+              onOpenMonthClicked,
+              steps,
+              setSteps,
+              selectedMonth,
+              setSelectedMonth,
+              onClose: onEditBottomSheetClose,
+            }}
           />
         </Stack>
       </div>

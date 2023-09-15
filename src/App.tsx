@@ -61,7 +61,7 @@ export type Purchase = {
 export type Expends = {
   id: string;
   date: number;
-  day: string;
+  day: [string, string];
   amount: number;
 };
 function App() {

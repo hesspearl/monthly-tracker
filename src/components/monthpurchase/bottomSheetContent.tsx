@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { CloseButton, Dropdown, Form, Image, Stack } from "react-bootstrap";
 import style from "./monthPurchase.module.css";
 import { Day, Months, getDate } from "../../utils/days";
@@ -16,7 +16,7 @@ export type ExpendsProps = {
   monthId: string;
   year: number;
   showDate: string;
-  day: string;
+  day: [string, string];
   date: number;
   amount: number | string;
   remain: number;
@@ -26,34 +26,24 @@ function BottomSheetContent({
   bottomSheetHandler,
   onCreateExpend,
   onOpenMonthClicked,
+  steps,
+  setSteps,
+  selectedMonth,
+  setSelectedMonth,
+  onClose,
 }: {
   bottomSheetHandler: (height: string, close?: boolean) => void;
   onCreateExpend: (data: ExpendsProps) => void;
   onOpenMonthClicked: (id: string) => void;
+  steps: number;
+  setSteps: Dispatch<number>;
+  selectedMonth: ExpendsProps;
+  setSelectedMonth: Dispatch<SetStateAction<ExpendsProps>>;
+  onClose: () => void;
 }) {
   const note = useNote();
 
-  const [steps, setSteps] = useState<number>(0);
-  const {
-    currentMonth,
-    year: selectedYear,
-    month: selectedDateOfMonth,
-    day,
-    theDay,
-  } = getDate(new Date());
-  const initialSelectedMonth = {
-    month: selectedDateOfMonth,
-    year: selectedYear,
-    showDate: ``,
-    day: "",
-    date: 1,
-    amount: "",
-    remain: 0,
-    monthId: "",
-  };
-
-  const [selectedMonth, setSelectedMonth] =
-    useState<ExpendsProps>(initialSelectedMonth);
+  const { day, theDay } = getDate(new Date());
 
   const getAllDaysInMonth = (month: number, year: number) =>
     Array.from(
@@ -66,18 +56,15 @@ function BottomSheetContent({
       (date) => {
         return {
           showDate: `${date.getDate()}, ${Object.keys(Day)[date.getDay()]}`,
-          day: Object.values(Day)[date.getDay()],
+          day: [
+            Object.values(Day)[date.getDay()],
+            Object.keys(Day)[date.getDay()],
+          ] as [string, string],
           date: date.getDate(),
         };
       }
     );
   }, [selectedMonth]);
-
-  const onClose = () => {
-    setSteps(0);
-    setSelectedMonth(initialSelectedMonth);
-    bottomSheetHandler("0%", true);
-  };
 
   const onSubmit = () => {
     if (typeof selectedMonth.amount !== "number") {
@@ -107,7 +94,7 @@ function BottomSheetContent({
 
   const chooseDayHandler = (date: {
     showDate: string;
-    day: string;
+    day: [string, string];
     date: number;
   }) => {
     setSelectedMonth((selected) => ({
@@ -189,7 +176,7 @@ function BottomSheetContent({
             onClick={() =>
               chooseDayHandler({
                 showDate: `${day}, ${Object.keys(Day)[theDay]}`,
-                day: Object.values(Day)[theDay],
+                day: [Object.values(Day)[theDay], Object.keys(Day)[theDay]],
                 date: day,
               })
             }

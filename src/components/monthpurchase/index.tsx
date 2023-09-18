@@ -73,11 +73,11 @@ function MonthlyPurchase({
     open: false,
   });
 
-  const initialSelectedMonth = {
+  const initialSelectedMonth: ExpendsProps = {
     month: selectedDateOfMonth,
     year: selectedYear,
-    showDate: ``,
-    day: ["", ""] as [string, string],
+    showDate: `1, Sunday`,
+    day: ["SUN", "Sunday"] as [string, string],
     date: 1,
     amount: "",
     remain: 0,
@@ -128,6 +128,37 @@ function MonthlyPurchase({
               amount,
             },
           ],
+        };
+        return updateMonthPurchase;
+      } else return purchase;
+    });
+    onUpdate(note.id, { ...note, purchases: updatedPurchases });
+  };
+
+  const onUpdateExpends = (data: ExpendsProps) => {
+    const updatedPurchases = note.purchases.map((purchase) => {
+      if (data.monthId === purchase.id) {
+        const amount = data.amount as number;
+        if (purchase.remain < amount) return purchase;
+        const updatedAmount = data.previousAmount
+          ? amount === 0
+            ? -data.previousAmount
+            : amount - data.previousAmount
+          : amount;
+        // console.log({
+        //   diff: updatedAmount,
+        //   previous: data.previousAmount,
+        //   new: amount,
+        //   totalRemain: purchase.remain - updatedAmount,
+        // });
+        const updateMonthPurchase: Purchase = {
+          ...purchase,
+          remain: purchase.remain - updatedAmount,
+          expends: purchase.expends.map((expend) =>
+            expend.id === data.expendId
+              ? { ...expend, date: data.date, day: data.day, amount }
+              : expend
+          ),
         };
         return updateMonthPurchase;
       } else return purchase;
@@ -245,6 +276,7 @@ function MonthlyPurchase({
               selectedMonth,
               setSelectedMonth,
               onClose: onEditBottomSheetClose,
+              onUpdateExpends,
             }}
           />
         </Stack>

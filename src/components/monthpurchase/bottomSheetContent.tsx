@@ -10,6 +10,10 @@ import { useNote } from "../../hook/useNote";
 import { BigButton, SmallButton } from "../button";
 import { useDelay } from "../../hook/useDelay";
 import MonthlyPurchase from ".";
+import BottomSheet from "../bottomSheet/BottomSheet";
+import BottomSheetDropDown from "../bottomSheet/BottomSheetDropDown";
+import BottomSheetInput from "../bottomSheet/BottomSheetInput";
+import BottomSheetButton from "../bottomSheet/BottomSheetButton";
 
 export type ExpendsProps = {
   month: number;
@@ -20,6 +24,8 @@ export type ExpendsProps = {
   date: number;
   amount: number | string;
   remain: number;
+  previousAmount?: number; // store the previous amount before edit
+  expendId?: string; // id of edited expend
 };
 
 function BottomSheetContent({
@@ -31,9 +37,11 @@ function BottomSheetContent({
   selectedMonth,
   setSelectedMonth,
   onClose,
+  onUpdateExpends,
 }: {
   bottomSheetHandler: (height: string, close?: boolean) => void;
   onCreateExpend: (data: ExpendsProps) => void;
+  onUpdateExpends: (data: ExpendsProps) => void;
   onOpenMonthClicked: (id: string) => void;
   steps: number;
   setSteps: Dispatch<number>;
@@ -70,7 +78,11 @@ function BottomSheetContent({
     if (typeof selectedMonth.amount !== "number") {
       return;
     }
-    onCreateExpend(selectedMonth);
+    if (selectedMonth.expendId) {
+      onUpdateExpends(selectedMonth);
+    } else {
+      onCreateExpend(selectedMonth);
+    }
 
     onClose();
   };
@@ -105,71 +117,66 @@ function BottomSheetContent({
     bottomSheetHandler("75%");
   };
   return (
-    <div className={`${style.bottomSheet} `} id="bottomSheet">
-      <div
-        className="d-flex  border-bottom  p-2 "
-        style={{
-          width: "100%",
-          justifyContent: "end",
-        }}
-      >
-        <CloseButton onClick={onClose} />
-      </div>
-
-      <Dropdown
-        data-bs-theme="dark"
-        className={style.dropDown}
-        style={{ display: "flex" }}
-      >
-        <Form.Label className="mt-3 fs-4">Choose a Month</Form.Label>
-        <Dropdown.Toggle
-          id="month"
-          className={style.toggle}
-          variant="secondary"
-        >
-          {steps > 1
+    <BottomSheet
+      data={selectedMonth}
+      closeButton={<CloseButton onClick={onClose} />}
+      footerStyle={{ display: steps > 2 ? "flex" : "none" }}
+      footer={
+        <>
+          <BottomSheetInput
+            title="Insert expends amount "
+            isInvalid={(selectedMonth.amount as number) > selectedMonth.remain}
+            required
+            min={0}
+            onChange={(e) =>
+              setSelectedMonth((selected) => ({
+                ...selected,
+                amount: Number(e.target.value),
+              }))
+            }
+            value={selectedMonth.amount}
+            type="number"
+          />
+          <BottomSheetButton
+            buttonsList={buttonsList}
+            title="Great! what to do now?"
+          />
+        </>
+      }
+    >
+      <BottomSheetDropDown
+        title="Choose a Month"
+        toggleTitle={
+          steps > 1
             ? `${Months[selectedMonth.month]} / ${selectedMonth.year} `
-            : "Choose Month"}
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu className={style.toggle}>
-          {note.purchases.map((purchase) => (
-            <Dropdown.Item
-              key={purchase.id}
-              disabled={purchase.remain === 0}
-              onClick={() => {
-                setSelectedMonth((selected) => ({
-                  ...selected,
-                  month: Number(Months[purchase.month as Months]),
-                  year: purchase.year,
-                  monthId: purchase.id,
-                  remain: purchase.remain,
-                }));
-                setSteps(2);
-                onOpenMonthClicked(purchase.id);
-                bottomSheetHandler("40%");
-              }}
-            >
-              {purchase?.month} / {purchase.year}
-            </Dropdown.Item>
-          ))}
-        </Dropdown.Menu>
-      </Dropdown>
-
-      <Dropdown
-        className={style.dropDown}
-        style={{ display: steps > 1 ? "flex" : "none" }}
-      >
-        <Form.Label className="mt-3 fs-4">Choose a Day</Form.Label>
-        <Stack className={` flex-row align-items-center `} gap={1}>
-          <Dropdown.Toggle
-            className={style.toggle}
-            style={{ width: 322 }}
-            id="day"
-            variant="secondary"
+            : "Choose Month"
+        }
+        containerStyle={{ display: "flex" }}
+        menuContent={note.purchases.map((purchase) => (
+          <Dropdown.Item
+            key={purchase.id}
+            disabled={purchase.remain === 0}
+            onClick={() => {
+              setSelectedMonth((selected) => ({
+                ...selected,
+                month: Number(Months[purchase.month as Months]),
+                year: purchase.year,
+                monthId: purchase.id,
+                remain: purchase.remain,
+              }));
+              setSteps(2);
+              onOpenMonthClicked(purchase.id);
+              bottomSheetHandler("40%");
+            }}
           >
-            {steps > 2 ? selectedMonth.showDate : "Choose a Day"}
-          </Dropdown.Toggle>
+            {purchase?.month} / {purchase.year}
+          </Dropdown.Item>
+        ))}
+      />
+      <BottomSheetDropDown
+        title="Choose a Day"
+        toggleTitle={steps > 2 ? selectedMonth.showDate : "Choose a Day"}
+        customToggle={
           <SmallButton
             image={calender}
             variant="secondary"
@@ -181,67 +188,19 @@ function BottomSheetContent({
               })
             }
           />
-        </Stack>
-
-        <Dropdown.Menu
-          className={style.toggle}
-          style={{
-            height: 300,
-            overflowY: "scroll",
-          }}
-        >
-          {dateList.map((date, index) => (
-            <Dropdown.Item key={index} onClick={() => chooseDayHandler(date)}>
-              {date.showDate}
-            </Dropdown.Item>
-          ))}
-        </Dropdown.Menu>
-      </Dropdown>
-
-      <Stack
-        style={{ display: steps > 2 ? "flex" : "none" }}
-        className={` flex-column align-items-center  fs-4 ${style.footer}`}
-      >
-        <Form.Group
-          controlId="title"
-          className="d-flex flex-column align-items-center mt-3 fs-4"
-        >
-          <Form.Label>Insert expends amount </Form.Label>
-          <Form.Control
-            isInvalid={(selectedMonth.amount as number) > selectedMonth.remain}
-            required
-            onChange={(e) =>
-              setSelectedMonth((selected) => ({
-                ...selected,
-                amount: Number(e.target.value),
-              }))
-            }
-            value={selectedMonth.amount}
-            type="number"
-            style={{
-              width: 373,
-              height: 44,
-              padding: 0,
-              textAlign: "center",
-            }}
-            //  placeholder={placeholder}
-          />
-        </Form.Group>
-
-        <p className="mt-3 fs-4">Great! what to do now?</p>
-        <div className="d-flex">
-          {buttonsList.map((button, index) => (
-            <BigButton
-              key={index}
-              onClick={button.onClick}
-              variant={button?.color}
-            >
-              <Image src={button.image} width={20} height={20} />
-            </BigButton>
-          ))}
-        </div>
-      </Stack>
-    </div>
+        }
+        containerStyle={{ display: steps > 1 ? "flex" : "none" }}
+        menuStyle={{
+          height: 300,
+          overflowY: "scroll",
+        }}
+        menuContent={dateList.map((date, index) => (
+          <Dropdown.Item key={index} onClick={() => chooseDayHandler(date)}>
+            {date.showDate}
+          </Dropdown.Item>
+        ))}
+      />
+    </BottomSheet>
   );
 }
 

@@ -1,0 +1,21 @@
+import { createContext, useContext } from "react";
+interface BottomSheetContextProps<T> {
+  data: T;
+}
+
+const BottomSheetContext =
+  createContext<BottomSheetContextProps<object> | null>(null);
+
+export const useBottomSheetContext = () => {
+  const context = useContext(BottomSheetContext);
+
+  if (!context) {
+    throw new Error(
+      "BottomSheet.* component must be rendered inside BottomSheet Component"
+    );
+  }
+
+  return context;
+};
+
+export default BottomSheetContext;

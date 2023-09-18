@@ -37,17 +37,19 @@ function DailyRow({
 
   const bind = useGesture({
     onDrag: ({ args: [index], movement: [x], cancel, direction: [xd] }) => {
-      const selectedExpend = expends[index];
+      const selectedExpend = expends[index as number];
       if (xd == 1) {
         setSelectedMonth({
           monthId: monthPurchase.id,
-          month: Months[monthPurchase.month as Months],
+          month: Number(Months[monthPurchase.month as Months]),
           amount: selectedExpend.amount,
           year: monthPurchase.year,
           day: selectedExpend.day,
           date: selectedExpend.date,
           showDate: `${selectedExpend.date}, ${selectedExpend.day[1]} `,
           remain: monthPurchase.remain,
+          expendId: selectedExpend.id,
+          previousAmount: selectedExpend.amount,
         });
         update();
       }

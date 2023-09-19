@@ -1,7 +1,7 @@
 import { Image, Stack } from "react-bootstrap";
-import style from "./monthPurchase.module.css";
-import edit from "../../assets/setting.svg";
-import { Months } from "../../utils/days";
+import style from "../monthPurchase.module.css";
+import edit from "../../../assets/setting.svg";
+import { Months } from "../../../utils/days";
 function MonthlyRow({
   current,
   month,

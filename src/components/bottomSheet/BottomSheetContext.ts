@@ -1,10 +1,15 @@
 import { createContext, useContext } from "react";
 interface BottomSheetContextProps<T> {
   data: T;
+  newFun: () => boolean;
 }
 
 const BottomSheetContext =
   createContext<BottomSheetContextProps<object> | null>(null);
+
+const BottomSheetContextProvider = () => {
+  const nefunc = () => true;
+};
 
 export const useBottomSheetContext = () => {
   const context = useContext(BottomSheetContext);

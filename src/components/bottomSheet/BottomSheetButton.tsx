@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { BigButton } from "../button";
 import { Image } from "react-bootstrap";
 
@@ -7,7 +7,7 @@ function BottomSheetButton({
   title,
 }: {
   buttonsList: { onClick: () => void; color: string; image: string }[];
-  title: string;
+  title: string | ReactNode;
 }) {
   return (
     <>

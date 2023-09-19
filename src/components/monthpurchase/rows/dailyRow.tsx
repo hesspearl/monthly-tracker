@@ -1,12 +1,11 @@
-import style from "./monthPurchase.module.css";
-import { Expends, Purchase } from "../../App";
+import style from "../monthPurchase.module.css";
+import { Expends, Purchase } from "../../../App";
 import { SpringValue, animated, useSprings } from "@react-spring/web";
 import { useDrag, useGesture } from "react-use-gesture";
-import edit from "../../assets/pencil-alt.svg";
-import bin from "../../assets/trash-alt.svg";
-import { Dispatch, SetStateAction } from "react";
-import { ExpendsProps } from "./bottomSheetContent";
-import { Day, Months } from "../../utils/days";
+import edit from "../../../assets/pencil-alt.svg";
+import bin from "../../../assets/trash-alt.svg";
+import { Day, Months } from "../../../utils/days";
+import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
 
 export const left = {
   bg: `linear-gradient(to right , #0D6efd 0%,#0D6efd 50%, #f61d1d 50%, #f61d1d 100% )`,
@@ -16,19 +15,23 @@ export const left = {
 
 interface DailyRowProps {
   expends: Expends[];
-  update: () => void;
-  onClose: () => void;
-  setSelectedMonth: Dispatch<ExpendsProps>;
+
   monthPurchase: Purchase;
 }
 
 function DailyRow({
   expends,
-  update,
-  onClose,
-  setSelectedMonth,
+
   monthPurchase,
 }: DailyRowProps) {
+  const {
+    daily: {
+      openEditExpendBottomSheet,
+      onEditExpendBottomSheetClose,
+      onDeleteExpendBottomSheetOpen,
+    },
+    dispatch,
+  } = useMonthPurchaseContext();
   const [props, api] = useSprings(expends.length, (i) => ({
     x: 0,
     display: "none",
@@ -39,19 +42,40 @@ function DailyRow({
     onDrag: ({ args: [index], movement: [x], cancel, direction: [xd] }) => {
       const selectedExpend = expends[index as number];
       if (xd == 1) {
-        setSelectedMonth({
-          monthId: monthPurchase.id,
-          month: Number(Months[monthPurchase.month as Months]),
-          amount: selectedExpend.amount,
-          year: monthPurchase.year,
-          day: selectedExpend.day,
-          date: selectedExpend.date,
-          showDate: `${selectedExpend.date}, ${selectedExpend.day[1]} `,
-          remain: monthPurchase.remain,
-          expendId: selectedExpend.id,
-          previousAmount: selectedExpend.amount,
+        dispatch({
+          type: "selectedMonth",
+          data: {
+            monthId: monthPurchase.id,
+            month: Number(Months[monthPurchase.month as Months]),
+            amount: selectedExpend.amount,
+            year: monthPurchase.year,
+            day: selectedExpend.day,
+            date: selectedExpend.date,
+            showDate: `${selectedExpend.date}, ${selectedExpend.day[1]} `,
+            remain: monthPurchase.remain,
+            expendId: selectedExpend.id,
+            previousAmount: selectedExpend.amount,
+          },
         });
-        update();
+        openEditExpendBottomSheet();
+      }
+
+      if (xd == -1) {
+        dispatch({
+          type: "selectedMonth",
+          data: {
+            monthId: monthPurchase.id,
+            month: Number(Months[monthPurchase.month as Months]),
+            amount: selectedExpend.amount,
+            year: monthPurchase.year,
+            day: selectedExpend.day,
+            date: selectedExpend.date,
+            showDate: `${selectedExpend.date}, ${selectedExpend.day[1]} `,
+            remain: monthPurchase.remain,
+            expendId: selectedExpend.id,
+          },
+        });
+        onDeleteExpendBottomSheetOpen();
       }
 
       if (x > 100 || x < -100) return cancel();
@@ -63,7 +87,7 @@ function DailyRow({
     },
     onDragEnd: (event) => {
       if (event.direction[0] == 0) {
-        onClose();
+        onEditExpendBottomSheetClose();
       }
     },
   });

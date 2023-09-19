@@ -1,7 +1,7 @@
 import { Button, Col, Form, Modal, Row, Stack } from "react-bootstrap";
-import { MonthlyListProps } from "./monthlyList";
-import SelectTags, { SelectTagProps } from "./selectTags";
-import { Tag } from "../App";
+import { MonthlyListProps } from "../../monthlyList";
+import SelectTags, { SelectTagProps } from "../../selectTags";
+import { Tag } from "../../../App";
 import {
   DragDropContext,
   Draggable,
@@ -9,13 +9,12 @@ import {
   Droppable,
   OnDragEndResponder,
 } from "react-beautiful-dnd";
-import { StrictModeDroppable } from "./StaticDroppable";
+import { StrictModeDroppable } from "../../StaticDroppable";
+import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
 
 interface EditTagModalProps
   extends Omit<MonthlyListProps, "notes" | "onSubmit">,
     SelectTagProps {
-  show: boolean;
-  handleClose: () => void;
   expendTags: Tag[];
   onUpdateExpendTags: () => void;
   onUpdateExpendTagsOrder: (orderedTags: Tag[]) => void;
@@ -23,8 +22,6 @@ interface EditTagModalProps
 
 function EditTagModal({
   availableTags,
-  show,
-  handleClose,
   onDeleteTag,
   setSelectedTags,
   selectedTags,
@@ -33,6 +30,7 @@ function EditTagModal({
   onUpdateExpendTags,
   onUpdateExpendTagsOrder,
 }: EditTagModalProps) {
+  const { editTagsModalIsOpen, dispatch } = useMonthPurchaseContext();
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) {
       return;
@@ -45,7 +43,10 @@ function EditTagModal({
   };
 
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal
+      show={editTagsModalIsOpen}
+      onHide={() => dispatch({ type: "editTagsModalIsOpen", data: false })}
+    >
       <Modal.Header closeButton>
         <Modal.Title>Edit Tags</Modal.Title>
       </Modal.Header>
@@ -94,7 +95,9 @@ function EditTagModal({
         <Stack className="mt-4">
           <Button
             onClick={() => {
-              onUpdateExpendTags(), handleClose(), setSelectedTags([]);
+              onUpdateExpendTags(),
+                dispatch({ type: "editTagsModalIsOpen", data: false }),
+                setSelectedTags([]);
             }}
           >
             save

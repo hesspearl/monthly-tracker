@@ -8,7 +8,9 @@ import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
 
 function ToggleButtons() {
   const [openToggle, setOpenToggle] = useState<boolean>(false);
-  const { bottomSheetHandler, dispatch } = useMonthPurchaseContext();
+  const { bottomSheetHandler, dispatch, bottomSheetType } =
+    useMonthPurchaseContext();
+
   return (
     <ButtonGroup
       vertical
@@ -17,6 +19,10 @@ function ToggleButtons() {
       <>
         <SmallButton
           variant="black"
+          onClick={() => {
+            dispatch({ type: "bottomSheetTypes", data: "edit-month" }),
+              bottomSheetHandler("50%");
+          }}
           image={calender}
           smallButtonStyle={
             openToggle ? style.transition2 : style.smallButtonStyle2
@@ -26,12 +32,12 @@ function ToggleButtons() {
           variant="red"
           image={cart}
           onClick={() => {
-            bottomSheetHandler("25%"),
-              dispatch({
-                type: "openMonthPurchase",
-                data: { id: "", open: false },
-              }),
-              dispatch({ type: "bottomSheetTypes", data: "edit-expend" });
+            dispatch({
+              type: "openMonthPurchase",
+              data: { id: "", open: false },
+            }),
+              dispatch({ type: "bottomSheetTypes", data: "edit-expend" }),
+              bottomSheetHandler("25%");
           }}
           smallButtonStyle={
             openToggle ? style.transition1 : style.smallButtonStyle

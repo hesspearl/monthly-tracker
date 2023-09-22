@@ -6,6 +6,7 @@ import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
 import { getDate } from "../../../utils/days";
 import BottomSheetDayContent from "../bottomSheets/bottomSheetContent";
 import BottomSheetDeleteDayRow from "../bottomSheets/bottomSheetDeleteRow";
+import BottomSheetMonthContent from "../bottomSheets/bottomSheetMonthContent";
 
 function MonthPurchaseBody() {
   const {
@@ -15,6 +16,7 @@ function MonthPurchaseBody() {
     bottomSheetType,
   } = useMonthPurchaseContext();
   const { currentMonth } = getDate(new Date());
+
   return (
     <div className="d-flex justify-content-center  ">
       <Stack className={`  p-3 ${style.container}`}>
@@ -41,8 +43,11 @@ function MonthPurchaseBody() {
             );
           })}
         </Stack>
-        {bottomSheetType === "edit-expend" && <BottomSheetDayContent />}
-        {bottomSheetType === "delete-Expend" && <BottomSheetDeleteDayRow />}
+        <div className={`${style.bottomSheet} `} id="bottomSheet">
+          {bottomSheetType === "edit-expend" && <BottomSheetDayContent />}
+          {bottomSheetType === "delete-Expend" && <BottomSheetDeleteDayRow />}
+          {bottomSheetType === "edit-month" && <BottomSheetMonthContent />}
+        </div>
       </Stack>
     </div>
   );

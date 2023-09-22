@@ -23,11 +23,7 @@ function BottomSheet<T extends object>({
   headerStyle,
 }: BottomSheetProps<T>) {
   return (
-    <div
-      className={`${style.bottomSheet} `}
-      id="bottomSheet"
-      style={containerStyle}
-    >
+    <>
       <div
         className="d-flex  border-bottom  p-2 "
         style={{
@@ -45,7 +41,7 @@ function BottomSheet<T extends object>({
       >
         {footer}
       </Stack>
-    </div>
+    </>
   );
 }
 

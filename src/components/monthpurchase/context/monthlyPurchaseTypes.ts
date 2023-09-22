@@ -45,6 +45,7 @@ type MonthPurchaseFunctionsTypes = {
 
 export type MonthlyProps = {
   onOpenMonthClicked: (id: string) => void;
+  onMonthBottomSheetClose: () => void;
 };
 
 export type DailyProps = {

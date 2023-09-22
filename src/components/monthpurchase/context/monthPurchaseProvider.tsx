@@ -48,7 +48,6 @@ export const MonthPurchaseContextProvider = ({
 
   const bottomSheetHandler = (height: string, close?: boolean) => {
     const bottomSheetElement = window.document.getElementById("bottomSheet");
-
     if (bottomSheetElement) {
       if (bottomSheetElement.style.height > height && height === "20%") return;
       if (close) {
@@ -58,6 +57,11 @@ export const MonthPurchaseContextProvider = ({
       }
       bottomSheetElement.style.height = height;
       bottomSheetElement.style.display = `flex`;
+      console.log({
+        height: bottomSheetElement.style.height,
+        display: bottomSheetElement.style.display,
+        elemet: bottomSheetElement.style,
+      });
     }
   };
 
@@ -148,6 +152,10 @@ export const MonthPurchaseContextProvider = ({
     bottomSheetHandler("0%", true);
   };
 
+  const onMonthBottomSheetClose = () => {
+    dispatch({ type: "bottomSheetTypes", data: "edit-month" });
+    bottomSheetHandler("0%", true);
+  };
   const onDeleteExpend = (data: ExpendsProps) => {
     const updatedPurchases = note.purchases.map((purchase) => {
       if (data.monthId === purchase.id) {
@@ -169,6 +177,7 @@ export const MonthPurchaseContextProvider = ({
   };
   const monthly: MonthlyProps = {
     onOpenMonthClicked,
+    onMonthBottomSheetClose,
   };
 
   const daily: DailyProps = {

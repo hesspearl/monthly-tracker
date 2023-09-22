@@ -97,7 +97,6 @@ function BottomSheetDayContent() {
   };
   return (
     <BottomSheet
-      data={selectedMonth}
       closeButton={<CloseButton onClick={onEditExpendBottomSheetClose} />}
       footerStyle={{ display: steps > 2 ? "flex" : "none" }}
       footer={

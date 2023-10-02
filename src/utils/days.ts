@@ -23,7 +23,7 @@ export enum Months {
   "December",
 }
 
-export const getDate = (date: Date) => {
+const dateHandler = (date: Date) => {
   const day = date.getDate();
   const month = date.getMonth();
   const theDay = date.getDay();
@@ -32,3 +32,5 @@ export const getDate = (date: Date) => {
 
   return { day, month, theDay, year, currentMonth };
 };
+
+export const getDate = dateHandler(new Date());

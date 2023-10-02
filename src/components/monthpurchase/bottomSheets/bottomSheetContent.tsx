@@ -25,7 +25,7 @@ export type ExpendsProps = {
 function BottomSheetDayContent() {
   const {
     note,
-    selectedMonth,
+    expendData,
     steps,
     daily: { onUpdateExpends, onCreateExpend, onEditExpendBottomSheetClose },
     dispatch,
@@ -33,7 +33,7 @@ function BottomSheetDayContent() {
     monthly: { onOpenMonthClicked },
   } = useMonthPurchaseContext();
 
-  const { day, theDay } = getDate(new Date());
+  const { day, theDay } = getDate;
 
   const getAllDaysInMonth = (month: number, year: number) =>
     Array.from(
@@ -42,39 +42,37 @@ function BottomSheetDayContent() {
     );
 
   const dateList = useMemo(() => {
-    return getAllDaysInMonth(selectedMonth.month, selectedMonth.year).map(
-      (date) => {
-        return {
-          showDate: `${date.getDate()}, ${Object.keys(Day)[date.getDay()]}`,
-          day: [
-            Object.values(Day)[date.getDay()],
-            Object.keys(Day)[date.getDay()],
-          ] as [string, string],
-          date: date.getDate(),
-        };
-      }
-    );
-  }, [selectedMonth]);
+    return getAllDaysInMonth(expendData.month, expendData.year).map((date) => {
+      return {
+        showDate: `${date.getDate()}, ${Object.keys(Day)[date.getDay()]}`,
+        day: [
+          Object.values(Day)[date.getDay()],
+          Object.keys(Day)[date.getDay()],
+        ] as [string, string],
+        date: date.getDate(),
+      };
+    });
+  }, [expendData]);
 
   const onSubmit = () => {
-    if (typeof selectedMonth.amount !== "number") {
+    if (typeof expendData.amount !== "number") {
       return;
     }
-    if (selectedMonth.expendId) {
-      onUpdateExpends(selectedMonth);
+    if (expendData.expendId) {
+      onUpdateExpends(expendData);
     } else {
-      onCreateExpend(selectedMonth);
+      onCreateExpend(expendData);
     }
 
     onEditExpendBottomSheetClose();
   };
 
   const onNewPurchase = () => {
-    if (typeof selectedMonth.amount !== "number") {
+    if (typeof expendData.amount !== "number") {
       return;
     }
-    onCreateExpend(selectedMonth);
-    dispatch({ type: "selectedMonth", data: { ...selectedMonth, amount: "" } });
+    onCreateExpend(expendData);
+    dispatch({ type: "expendData", data: { ...expendData, amount: "" } });
   };
 
   const buttonsList = [
@@ -91,7 +89,7 @@ function BottomSheetDayContent() {
     day: [string, string];
     date: number;
   }) => {
-    dispatch({ type: "selectedMonth", data: { ...selectedMonth, ...date } });
+    dispatch({ type: "expendData", data: { ...expendData, ...date } });
     dispatch({ type: "steps", data: 3 });
     bottomSheetHandler("75%");
   };
@@ -103,16 +101,16 @@ function BottomSheetDayContent() {
         <>
           <BottomSheet.input
             title="Insert expends amount "
-            isInvalid={(selectedMonth.amount as number) > selectedMonth.remain}
+            isInvalid={(expendData.amount as number) > expendData.remain}
             required
             min={0}
             onChange={(e) =>
               dispatch({
-                type: "selectedMonth",
-                data: { ...selectedMonth, amount: Number(e.target.value) },
+                type: "expendData",
+                data: { ...expendData, amount: Number(e.target.value) },
               })
             }
-            value={selectedMonth.amount}
+            value={expendData.amount}
             type="number"
           />
           <BottomSheet.button
@@ -126,7 +124,7 @@ function BottomSheetDayContent() {
         title="Choose a Month"
         toggleTitle={
           steps > 1
-            ? `${Months[selectedMonth.month]} / ${selectedMonth.year} `
+            ? `${Months[expendData.month]} / ${expendData.year} `
             : "Choose Month"
         }
         containerStyle={{ display: "flex" }}
@@ -136,9 +134,9 @@ function BottomSheetDayContent() {
             disabled={purchase.remain === 0}
             onClick={() => {
               dispatch({
-                type: "selectedMonth",
+                type: "expendData",
                 data: {
-                  ...selectedMonth,
+                  ...expendData,
                   month: Number(Months[purchase.month as Months]),
                   year: purchase.year,
                   monthId: purchase.id,
@@ -157,7 +155,7 @@ function BottomSheetDayContent() {
       />
       <BottomSheet.dropDown
         title="Choose a Day"
-        toggleTitle={steps > 2 ? selectedMonth.showDate : "Choose a Day"}
+        toggleTitle={steps > 2 ? expendData.showDate : "Choose a Day"}
         customToggle={
           <SmallButton
             image={calender}

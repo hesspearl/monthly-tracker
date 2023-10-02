@@ -15,7 +15,7 @@ function MonthPurchaseBody() {
     openMonthPurchase,
     bottomSheetType,
   } = useMonthPurchaseContext();
-  const { currentMonth } = getDate(new Date());
+  const { currentMonth } = getDate;
 
   return (
     <div className="d-flex justify-content-center  ">
@@ -23,10 +23,9 @@ function MonthPurchaseBody() {
         <Stack gap={3} style={{ overflowY: "scroll", overflowX: "hidden" }}>
           {note.purchases.map((purchase) => {
             return (
-              <>
+              <div key={purchase.id}>
                 <MonthlyRow
                   onMonthClick={() => onOpenMonthClicked(purchase.id)}
-                  key={purchase.id}
                   current={purchase.month === currentMonth}
                   {...purchase}
                 />
@@ -39,7 +38,7 @@ function MonthPurchaseBody() {
                       }}
                     />
                   )}
-              </>
+              </div>
             );
           })}
         </Stack>

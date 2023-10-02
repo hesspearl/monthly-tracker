@@ -43,7 +43,7 @@ function DailyRow({
       const selectedExpend = expends[index as number];
       if (xd == 1) {
         dispatch({
-          type: "selectedMonth",
+          type: "expendData",
           data: {
             monthId: monthPurchase.id,
             month: Number(Months[monthPurchase.month as Months]),
@@ -62,7 +62,7 @@ function DailyRow({
 
       if (xd == -1) {
         dispatch({
-          type: "selectedMonth",
+          type: "expendData",
           data: {
             monthId: monthPurchase.id,
             month: Number(Months[monthPurchase.month as Months]),

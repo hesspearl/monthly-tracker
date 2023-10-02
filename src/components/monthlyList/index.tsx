@@ -27,7 +27,7 @@ function MonthlyList({
 }: MonthlyListProps) {
   const [text, setText] = useState<string>("");
   const [editModalIsOpen, setEditModalIsOpen] = useState<boolean>(false);
-  const { currentMonth } = getDate(new Date());
+  const { currentMonth } = getDate;
 
   const filteredNotes = useMemo(
     () =>

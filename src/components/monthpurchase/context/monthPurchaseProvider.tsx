@@ -6,10 +6,12 @@ import { NoteData, Purchase } from "../../../App";
 import MonthPurchaseContext from "./monthPurchaseContext";
 import { DailyProps, MonthlyProps } from "./monthlyPurchaseTypes";
 import {
-  initialSelectedMonth,
+  initialExpendData,
   monthlyPurchaseInit,
   monthlyPurchaseState,
 } from "./monthlyPurchaseStates";
+import { PurchaseProps } from "../bottomSheets/bottomSheetMonthContent";
+import { Months } from "../../../utils/days";
 
 export const MonthPurchaseContextProvider = ({
   children,
@@ -26,9 +28,10 @@ export const MonthPurchaseContextProvider = ({
       openMonthPurchase,
       steps,
       title,
-      selectedMonth,
+      expendData,
       editTagsModalIsOpen,
       bottomSheetType,
+      purchaseData,
     },
     dispatch,
   ] = useReducer(monthlyPurchaseState, {
@@ -88,6 +91,31 @@ export const MonthPurchaseContextProvider = ({
     });
     onUpdate(note.id, { ...note, purchases: updatedPurchases });
   };
+  const onCreatePurchase = ({
+    remain,
+    total,
+    month,
+    year,
+    expends,
+    date,
+  }: PurchaseProps) => {
+    const updatedPurchase = [
+      ...note.purchases,
+      { id: uuidV4(), remain, total, month, year, expends, date },
+    ];
+
+    updatedPurchase.sort((a, b) => {
+      if (a.year !== b.year) return a.year - b.year;
+      const month1 = +Months[a.month as Months];
+      const month2 = +Months[b.month as Months];
+      return month1 - month2;
+    });
+
+    onUpdate(note.id, {
+      ...note,
+      purchases: updatedPurchase,
+    });
+  };
 
   const onUpdateExpends = (data: ExpendsProps) => {
     const updatedPurchases = note.purchases.map((purchase) => {
@@ -138,7 +166,7 @@ export const MonthPurchaseContextProvider = ({
   const onEditExpendBottomSheetClose = () => {
     dispatch({ type: "bottomSheetTypes", data: "edit-expend" });
     dispatch({ type: "steps", data: 0 });
-    dispatch({ type: "selectedMonth", data: initialSelectedMonth });
+    dispatch({ type: "expendData", data: initialExpendData });
     bottomSheetHandler("0%", true);
   };
 
@@ -173,11 +201,12 @@ export const MonthPurchaseContextProvider = ({
     });
     onUpdate(note.id, { ...note, purchases: updatedPurchases });
     onDeleteExpendBottomSheetClose();
-    dispatch({ type: "selectedMonth", data: initialSelectedMonth });
+    dispatch({ type: "expendData", data: initialExpendData });
   };
   const monthly: MonthlyProps = {
     onOpenMonthClicked,
     onMonthBottomSheetClose,
+    onCreatePurchase,
   };
 
   const daily: DailyProps = {
@@ -200,12 +229,13 @@ export const MonthPurchaseContextProvider = ({
         dispatch,
         steps,
         title,
-        selectedMonth,
+        expendData,
         editTitle,
         openMonthPurchase,
         editTitleHandler,
         note,
         editTagsModalIsOpen,
+        purchaseData,
       }}
     >
       {children}

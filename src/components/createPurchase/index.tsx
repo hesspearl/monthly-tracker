@@ -22,28 +22,31 @@ function CreatePurchase({
 }: CreatePurchaseProps) {
   const [data, setData] = useState<Omit<NoteData, "tags">>({
     title: "",
-    total: "",
+    total: 0,
     image: images[0],
     purchases: [],
   });
-  const { year, currentMonth } = getDate(new Date());
+  const { year, currentMonth, month, day } = getDate;
 
   const navigate = useNavigate();
+  const dateFormat = new Date(`${month + 1}-${day}-${year}`);
 
   const onChangeTotal = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    const total = Number(e.target.value);
     setData((prev) => ({
       ...prev,
-      total: e.target.value,
+      total,
       purchases: [
         {
           id: uuidV4(),
           month: currentMonth,
           year,
-          total: e.target.value,
-          remain: e.target.value,
+          total,
+          remain: total,
           expends: [],
+          date: dateFormat.toString(),
         },
       ],
     }));
@@ -79,7 +82,7 @@ function CreatePurchase({
           placeholder="Total"
           label="Total"
           onChange={onChangeTotal}
-          value={data.total}
+          value={data.total.toString()}
         />
         <Stack className="d-flex flex-column align-items-center">
           <div style={{ width: 350 }}>

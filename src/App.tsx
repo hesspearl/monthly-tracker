@@ -56,6 +56,7 @@ export type Purchase = {
   total: number;
   remain: number;
   expends: Expends[];
+  date: Date | string;
 };
 
 export type Expends = {

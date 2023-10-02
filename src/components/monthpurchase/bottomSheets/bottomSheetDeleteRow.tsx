@@ -6,7 +6,7 @@ import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
 
 function BottomSheetDeleteDayRow() {
   const {
-    selectedMonth,
+    expendData,
     daily: { onDeleteExpendBottomSheetClose, onDeleteExpend },
   } = useMonthPurchaseContext();
   return (
@@ -16,7 +16,7 @@ function BottomSheetDeleteDayRow() {
       <BottomSheet.button
         buttonsList={[
           {
-            onClick: () => onDeleteExpend(selectedMonth),
+            onClick: () => onDeleteExpend(expendData),
             color: "red",
             image: bin,
           },
@@ -32,7 +32,7 @@ function BottomSheetDeleteDayRow() {
                 textDecorationLine: "line-through",
                 fontStyle: "italic",
               }}
-            >{`${selectedMonth.showDate} |  -${selectedMonth.amount}$`}</p>
+            >{`${expendData.showDate} |  -${expendData.amount}$`}</p>
           </>
         }
       />

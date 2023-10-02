@@ -5,9 +5,13 @@ import {
   MonthPurchaseStatesTypes,
 } from "./monthlyPurchaseTypes";
 
-const { year: selectedYear, month: selectedDateOfMonth } = getDate(new Date());
+const {
+  year: selectedYear,
+  month: selectedDateOfMonth,
+  currentMonth,
+} = getDate;
 
-export const initialSelectedMonth: ExpendsProps = {
+export const initialExpendData: ExpendsProps = {
   month: selectedDateOfMonth,
   year: selectedYear,
   showDate: `1, Sunday`,
@@ -18,8 +22,18 @@ export const initialSelectedMonth: ExpendsProps = {
   monthId: "",
 };
 
+export const initialPurchaseDate = {
+  month: "",
+  year: 0,
+  remain: 0,
+  total: 0,
+  expends: [],
+  date: undefined,
+};
+
 export const monthlyPurchaseInit: MonthPurchaseStatesTypes = {
-  selectedMonth: initialSelectedMonth,
+  expendData: initialExpendData,
+  purchaseData: initialPurchaseDate,
   editTitle: false,
   title: "",
   steps: 0,
@@ -39,10 +53,10 @@ export const monthlyPurchaseState = (
         editTitle: action.data,
       };
 
-    case "selectedMonth":
+    case "expendData":
       return {
         ...state,
-        selectedMonth: action.data,
+        expendData: action.data,
       };
 
     case "openMonthPurchase":
@@ -70,6 +84,11 @@ export const monthlyPurchaseState = (
       return {
         ...state,
         bottomSheetType: action.data,
+      };
+    case "purchaseData":
+      return {
+        ...state,
+        purchaseData: action.data,
       };
     default:
       break;

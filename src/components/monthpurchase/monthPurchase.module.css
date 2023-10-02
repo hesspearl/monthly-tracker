@@ -100,3 +100,6 @@ width: 373px;
    
 
 }
+.popper{
+  inset: "0px auto auto 60px";
+}

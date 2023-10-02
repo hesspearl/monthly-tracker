@@ -1,6 +1,7 @@
 import { Dispatch } from "react";
 import { ExpendsProps } from "../bottomSheets/bottomSheetContent";
-import { Note } from "../../../App";
+import { Note, Purchase } from "../../../App";
+import { PurchaseProps } from "../bottomSheets/bottomSheetMonthContent";
 
 type BottomSheetTypes =
   | "edit-expend"
@@ -16,18 +17,20 @@ export type MonthPurchaseStatesTypes = {
     id: string;
     open: boolean;
   };
-  selectedMonth: ExpendsProps;
+  expendData: ExpendsProps;
   editTagsModalIsOpen: boolean;
   bottomSheetType: BottomSheetTypes;
+  purchaseData: PurchaseProps;
 };
 
 export type MonthPurchaseActionTypes =
-  | { type: "selectedMonth"; data: ExpendsProps }
+  | { type: "expendData"; data: ExpendsProps }
   | { type: "editTitle"; data: boolean }
   | { type: "title"; data: string }
   | { type: "steps"; data: number }
   | { type: "editTagsModalIsOpen"; data: boolean }
   | { type: "bottomSheetTypes"; data: BottomSheetTypes }
+  | { type: "purchaseData"; data: PurchaseProps }
   | {
       type: "openMonthPurchase";
       data: {
@@ -46,6 +49,7 @@ type MonthPurchaseFunctionsTypes = {
 export type MonthlyProps = {
   onOpenMonthClicked: (id: string) => void;
   onMonthBottomSheetClose: () => void;
+  onCreatePurchase: (data: PurchaseProps) => void;
 };
 
 export type DailyProps = {

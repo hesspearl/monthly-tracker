@@ -10,7 +10,6 @@ import { useNote } from "../../hook/useNote";
 import ToggleButtons from "./toggleButtons";
 
 interface MonthlyPurchaseProps {
-  onDelete: (id: string) => void;
   selectedTags: Tag[];
   setSelectedTags: Dispatch<SetStateAction<Tag[]>>;
   onAddTag: (tag: Tag) => void;
@@ -32,6 +31,7 @@ function MonthlyPurchase({
 }: MonthlyPurchaseProps) {
   const note = useNote();
 
+  console.log(note);
   return (
     <MonthPurchaseContextProvider {...{ onUpdate }}>
       <Stack
@@ -49,7 +49,7 @@ function MonthlyPurchase({
           onUpdateExpendTags={() =>
             onUpdate(note.id, {
               ...note,
-              tags: [...note.tags, ...selectedTags],
+              tagsIds: [...note.tagsIds, ...selectedTags.map((tag) => tag.id)],
             })
           }
           onUpdateExpendTagsOrder={(orderedTags: Tag[]) => {

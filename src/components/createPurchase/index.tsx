@@ -1,5 +1,5 @@
 import PageTitle from "../pageTitle";
-import { NoteData, Tag } from "../../App";
+import { NoteData, RawNoteData, Tag } from "../../App";
 import FormInput from "../formInput";
 import SelectTags, { SelectTagProps } from "../selectTags";
 import { Button, Form, Image, Stack } from "react-bootstrap";
@@ -10,7 +10,7 @@ import { v4 as uuidV4 } from "uuid";
 import { getDate } from "../../utils/days";
 
 export interface CreatePurchaseProps extends SelectTagProps {
-  onSubmit: (data: NoteData) => void;
+  onSubmit: (data: RawNoteData) => void;
 }
 
 function CreatePurchase({
@@ -20,7 +20,7 @@ function CreatePurchase({
   setSelectedTags,
   selectedTags,
 }: CreatePurchaseProps) {
-  const [data, setData] = useState<Omit<NoteData, "tags">>({
+  const [data, setData] = useState<Omit<RawNoteData, "tagsIds">>({
     title: "",
     total: 0,
     image: images[0],
@@ -46,7 +46,7 @@ function CreatePurchase({
           total,
           remain: total,
           expends: [],
-          date: dateFormat.toString(),
+          date: new Date(dateFormat.toString()),
         },
       ],
     }));
@@ -55,7 +55,8 @@ function CreatePurchase({
   return (
     <Form
       onSubmit={() => {
-        onSubmit({ ...data, tags: selectedTags }), navigate("..");
+        onSubmit({ ...data, tagsIds: selectedTags.map((tag) => tag.id) }),
+          navigate("..");
       }}
       className="d-flex flex-column align-items-center "
     >

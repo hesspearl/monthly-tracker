@@ -45,7 +45,7 @@ function MonthlyRow({
   };
 
   return (
-    <div className={` position-relative `}>
+    <div className={` position-relative mb-1 `}>
       <Image
         src={edit}
         role="button"

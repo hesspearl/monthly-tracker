@@ -10,7 +10,7 @@ import MonthlyPurchase from "./components/monthpurchase";
 import CreatePurchase from "./components/createPurchase";
 import { v4 as uuidV4 } from "uuid";
 import CreateNewPurchase from "./components/createNewPurchase";
-import { Months } from "./utils/days";
+import { Months, getDate } from "./utils/days";
 
 interface StringValidator {
   isAcceptable(s: string): boolean;
@@ -47,6 +47,7 @@ export type RawNoteData = {
 
 export type NoteData = {
   tags: Tag[];
+  tagsIds: string[];
 } & commonNoteData;
 
 export type Purchase = {
@@ -66,11 +67,11 @@ export type Expends = {
   amount: number;
 };
 function App() {
-  const [notes, setNotes] = useLocalStorage<Note[]>("NOTES", []);
+  const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", []);
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
-
-  const onCreateNote = ({ ...data }: NoteData) => {
+  const { currentMonth } = getDate;
+  const onCreateNote = ({ ...data }: RawNoteData) => {
     setNotes((prevNotes) => [...prevNotes, { ...data, id: uuidV4() }]);
   };
 
@@ -89,6 +90,11 @@ function App() {
       })
     );
   }
+
+  function onAddTag(tag: Tag) {
+    setTags((prev) => [...prev, tag]);
+  }
+
   const onUpdateTag = (id: string, label: string) => {
     setTags((prevTags) =>
       prevTags.map((tag) => {
@@ -101,13 +107,17 @@ function App() {
     );
   };
 
+  const onDeleteTag = (id: string) => {
+    setTags((prevTags) => prevTags.filter((tag) => tag.id !== id));
+  };
+
   function onDeleteNoteTag(id: string, tagId: string): void {
     setNotes((prevNotes) =>
       prevNotes.map((note) => {
         if (note.id === id) {
           return {
             ...note,
-            tags: note.tags.filter((tag) => tag.id !== tagId),
+            tagsIds: note.tagsIds.filter((tag) => tag !== tagId),
           };
         } else {
           return note;
@@ -115,16 +125,21 @@ function App() {
       })
     );
   }
-  function onAddTag(tag: Tag) {
-    setTags((prev) => [...prev, tag]);
-  }
 
   const notesWithTags = useMemo(
     () =>
-      notes.map((note) => ({
-        ...note,
-      })),
-    [notes]
+      notes.map((note) => {
+        const currentMonthPurchase = note.purchases.find(
+          (purchase) => purchase.month === currentMonth
+        );
+
+        return {
+          ...note,
+          total: currentMonthPurchase ? currentMonthPurchase.remain : 0,
+          tags: tags.filter((tag) => note.tagsIds.includes(tag.id)),
+        };
+      }),
+    [notes, currentMonth, tags]
   );
 
   return (
@@ -137,7 +152,13 @@ function App() {
               availableTags={tags}
               notes={notesWithTags}
               onSubmit={onCreateNote}
-              {...{ onAddTag, selectedTags, setSelectedTags }}
+              {...{
+                onAddTag,
+                selectedTags,
+                setSelectedTags,
+                onUpdateTag,
+                onDeleteTag,
+              }}
             />
           }
         />

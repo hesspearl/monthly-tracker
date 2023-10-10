@@ -20,14 +20,17 @@ function MonthPurchaseBody() {
   return (
     <div className="d-flex justify-content-center  ">
       <Stack className={`  p-3 ${style.container}`}>
-        <Stack gap={3} style={{ overflowY: "scroll", overflowX: "hidden" }}>
+        <Stack
+          gap={3}
+          style={{ overflowY: "scroll", overflowX: "hidden", padding: 10 }}
+        >
           {note.purchases.map((purchase) => {
             return (
               <div key={purchase.id}>
                 <MonthlyRow
                   onMonthClick={() => onOpenMonthClicked(purchase.id)}
                   current={purchase.month === currentMonth}
-                  {...purchase}
+                  {...{ ...purchase, month: purchase.month as string }}
                 />
                 {openMonthPurchase.id === purchase.id &&
                   openMonthPurchase.open && (

@@ -33,7 +33,7 @@ function BottomSheetDayContent() {
     monthly: { onOpenMonthClicked },
   } = useMonthPurchaseContext();
 
-  const { day, theDay } = getDate;
+  const { day, theDay, currentMonth } = getDate;
 
   const getAllDaysInMonth = (month: number, year: number) =>
     Array.from(
@@ -81,7 +81,7 @@ function BottomSheetDayContent() {
       onClick: onSubmit,
       color: "#B6B5ED",
     },
-    { image: cart, onClick: onNewPurchase, color: "red" },
+    // { image: cart, onClick: onNewPurchase, color: "red" },
   ];
 
   const chooseDayHandler = (date: {
@@ -92,6 +92,24 @@ function BottomSheetDayContent() {
     dispatch({ type: "expendData", data: { ...expendData, ...date } });
     dispatch({ type: "steps", data: 3 });
     bottomSheetHandler("75%");
+  };
+
+  const ShowTodayButton = (month: string) => {
+    if (month === currentMonth) {
+      return (
+        <SmallButton
+          image={calender}
+          variant="secondary"
+          onClick={() =>
+            chooseDayHandler({
+              showDate: `${day}, ${Object.keys(Day)[theDay]}`,
+              day: [Object.values(Day)[theDay], Object.keys(Day)[theDay]],
+              date: day,
+            })
+          }
+        />
+      );
+    } else return <div />;
   };
   return (
     <BottomSheet
@@ -128,6 +146,7 @@ function BottomSheetDayContent() {
             : "Choose Month"
         }
         containerStyle={{ display: "flex" }}
+        menuStyle={{ height: "auto" }}
         menuContent={note.purchases.map((purchase) => (
           <Dropdown.Item
             key={purchase.id}
@@ -156,19 +175,7 @@ function BottomSheetDayContent() {
       <BottomSheet.dropDown
         title="Choose a Day"
         toggleTitle={steps > 2 ? expendData.showDate : "Choose a Day"}
-        customToggle={
-          <SmallButton
-            image={calender}
-            variant="secondary"
-            onClick={() =>
-              chooseDayHandler({
-                showDate: `${day}, ${Object.keys(Day)[theDay]}`,
-                day: [Object.values(Day)[theDay], Object.keys(Day)[theDay]],
-                date: day,
-              })
-            }
-          />
-        }
+        customToggle={ShowTodayButton(Months[expendData.month])}
         containerStyle={{ display: steps > 1 ? "flex" : "none" }}
         menuStyle={{
           height: 300,

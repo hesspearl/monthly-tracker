@@ -3,3 +3,33 @@
     height: 564px;
     max-height: 80%;
 }
+
+.marquee {
+    width: 450px;
+    margin: 0 auto;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  
+  .marquee span {
+    display: flex;
+    width: auto;
+    text-wrap: nowrap;
+    /* padding-left: 100%; */
+    /* show the marquee just outside the paragraph */
+    animation: marquee 10s linear infinite;
+
+  }
+
+  
+  
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    25% {transform: translateX(0%);}
+    70% { transform: translateX(-100%);}
+    100% { transform: translateX(-100%); }
+  }
+  
+  
+  
+  

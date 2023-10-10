@@ -53,7 +53,7 @@ function MonthPurchaseHeader() {
         </Stack>
       </Col>
       <Col xs="auto">
-        <Stack gap={2} direction="horizontal">
+        <Stack className="mt-5">
           <Link to={`/`}>
             <Button>Back</Button>
           </Link>

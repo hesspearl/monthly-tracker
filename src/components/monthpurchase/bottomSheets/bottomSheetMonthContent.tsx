@@ -1,11 +1,12 @@
 import BottomSheet from "../../bottomSheet/BottomSheet";
-import { CloseButton, Form, Image } from "react-bootstrap";
+import { CloseButton, Form, Image, Stack } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
 import style from "../monthPurchase.module.css";
 import { BigButton } from "../../button";
 import check from "../../../assets/check.svg";
+import bin from "../../../assets/trash-alt.svg";
 import { Expends } from "../../../App";
 import { Months } from "../../../utils/days";
 import { useMemo } from "react";
@@ -23,7 +24,12 @@ export type PurchaseProps = {
 function BottomSheetMonthContent() {
   const {
     note,
-    monthly: { onMonthBottomSheetClose, onCreatePurchase },
+    monthly: {
+      onMonthBottomSheetClose,
+      onCreatePurchase,
+      onUpdatePurchase,
+      onDeletePurchase,
+    },
     dispatch,
     purchaseData,
   } = useMonthPurchaseContext();
@@ -34,7 +40,16 @@ function BottomSheetMonthContent() {
   );
 
   const handleClick = () => {
+    if (purchaseData.monthId) {
+      onUpdatePurchase(purchaseData);
+      handleCloseBottomSheet();
+      return;
+    }
     onCreatePurchase(purchaseData);
+    handleCloseBottomSheet();
+  };
+
+  const handleCloseBottomSheet = () => {
     onMonthBottomSheetClose();
     dispatch({ type: "purchaseData", data: initialPurchaseDate });
   };
@@ -92,9 +107,20 @@ function BottomSheetMonthContent() {
           })
         }
       />
-      <BigButton bigButtonStyle="m-2" variant="#B6B5ED" onClick={handleClick}>
-        <Image src={check} />
-      </BigButton>
+      <div className="d-flex flex-row align-items-center">
+        <BigButton bigButtonStyle="m-2" variant="#B6B5ED" onClick={handleClick}>
+          <Image src={check} />
+        </BigButton>
+        {purchaseData.monthId && (
+          <BigButton
+            bigButtonStyle="m-2"
+            variant="red"
+            onClick={() => onDeletePurchase(purchaseData.monthId!)}
+          >
+            <Image src={bin} />
+          </BigButton>
+        )}
+      </div>
     </BottomSheet>
   );
 }

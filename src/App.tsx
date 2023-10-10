@@ -56,7 +56,7 @@ export type Purchase = {
   total: number;
   remain: number;
   expends: Expends[];
-  date: Date | string;
+  date: Date;
 };
 
 export type Expends = {
@@ -107,6 +107,7 @@ function App() {
         if (note.id === id) {
           return {
             ...note,
+            tags: note.tags.filter((tag) => tag.id !== tagId),
           };
         } else {
           return note;

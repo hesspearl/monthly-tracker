@@ -5,11 +5,12 @@ interface PageTitleOptionalProps<WithButtons> {
   title: string;
   withButtons?: WithButtons;
   button1?: string;
-  // button2?: string;
+  button2?: string;
 }
 
 interface OnClickOptions {
   onButtonClick?: () => void;
+  onButton2Click?: () => void;
   linkTo?: string;
 }
 
@@ -19,7 +20,9 @@ const PageTitle = <WithButtons extends boolean>({
   withButtons,
   button1,
   onButtonClick,
-}: // button2,
+  button2,
+  onButton2Click,
+}: //
 // ,
 WithButtons extends true
   ? Required<PageTitleOptionalProps<WithButtons>> & OnClickOptions
@@ -39,11 +42,10 @@ WithButtons extends true
               {button1}
             </Button>
           </Link>
-          {/* 
+
           <Button variant="outline-secondary" onClick={onButton2Click}>
             {button2}
-          </Button> 
-          */}
+          </Button>
         </Stack>
       </Col>
     </Row>

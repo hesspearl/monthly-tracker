@@ -48,8 +48,11 @@ type MonthPurchaseFunctionsTypes = {
 
 export type MonthlyProps = {
   onOpenMonthClicked: (id: string) => void;
+  onMonthBottomSheetOpen: () => void;
   onMonthBottomSheetClose: () => void;
   onCreatePurchase: (data: PurchaseProps) => void;
+  onUpdatePurchase: (data: PurchaseProps) => void;
+  onDeletePurchase: (id: string) => void;
 };
 
 export type DailyProps = {

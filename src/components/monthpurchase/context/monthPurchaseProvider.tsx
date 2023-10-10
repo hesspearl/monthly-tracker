@@ -91,6 +91,16 @@ export const MonthPurchaseContextProvider = ({
     });
     onUpdate(note.id, { ...note, purchases: updatedPurchases });
   };
+
+  const sortPurchase = (array: Purchase[]) => {
+    return array.sort((a, b) => {
+      if (a.year !== b.year) return a.year - b.year;
+      const month1 = +Months[a.month as Months];
+      const month2 = +Months[b.month as Months];
+      return month1 - month2;
+    });
+  };
+
   const onCreatePurchase = ({
     remain,
     total,
@@ -101,15 +111,46 @@ export const MonthPurchaseContextProvider = ({
   }: PurchaseProps) => {
     const updatedPurchase = [
       ...note.purchases,
-      { id: uuidV4(), remain, total, month, year, expends, date },
+      { id: uuidV4(), remain, total, month, year, expends, date: date! },
     ];
 
-    updatedPurchase.sort((a, b) => {
-      if (a.year !== b.year) return a.year - b.year;
-      const month1 = +Months[a.month as Months];
-      const month2 = +Months[b.month as Months];
-      return month1 - month2;
+    sortPurchase(updatedPurchase);
+    onUpdate(note.id, {
+      ...note,
+      purchases: updatedPurchase,
     });
+  };
+
+  const onUpdatePurchase = ({
+    monthId,
+    total,
+    month,
+    year,
+    date,
+  }: PurchaseProps) => {
+    const updatedPurchase = note.purchases.map((purchase) =>
+      purchase.id === monthId
+        ? {
+            ...purchase,
+            total,
+            month,
+            year,
+            date: date!,
+          }
+        : purchase
+    );
+
+    sortPurchase(updatedPurchase);
+    onUpdate(note.id, {
+      ...note,
+      purchases: updatedPurchase,
+    });
+  };
+
+  const onDeletePurchase = (monthId: string) => {
+    const updatedPurchase = note.purchases.filter(
+      (purchase) => purchase.id !== monthId
+    );
 
     onUpdate(note.id, {
       ...note,
@@ -127,12 +168,7 @@ export const MonthPurchaseContextProvider = ({
             ? -data.previousAmount
             : amount - data.previousAmount
           : amount;
-        // console.log({
-        //   diff: updatedAmount,
-        //   previous: data.previousAmount,
-        //   new: amount,
-        //   totalRemain: purchase.remain - updatedAmount,
-        // });
+
         const updateMonthPurchase: Purchase = {
           ...purchase,
           remain: purchase.remain - updatedAmount,
@@ -203,10 +239,18 @@ export const MonthPurchaseContextProvider = ({
     onDeleteExpendBottomSheetClose();
     dispatch({ type: "expendData", data: initialExpendData });
   };
+
+  const onMonthBottomSheetOpen = () => {
+    dispatch({ type: "bottomSheetTypes", data: "edit-month" }),
+      bottomSheetHandler("50%");
+  };
   const monthly: MonthlyProps = {
     onOpenMonthClicked,
+    onMonthBottomSheetOpen,
     onMonthBottomSheetClose,
     onCreatePurchase,
+    onUpdatePurchase,
+    onDeletePurchase,
   };
 
   const daily: DailyProps = {

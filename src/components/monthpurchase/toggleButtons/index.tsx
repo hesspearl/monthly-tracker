@@ -8,8 +8,11 @@ import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
 
 function ToggleButtons() {
   const [openToggle, setOpenToggle] = useState<boolean>(false);
-  const { bottomSheetHandler, dispatch, bottomSheetType } =
-    useMonthPurchaseContext();
+  const {
+    bottomSheetHandler,
+    dispatch,
+    monthly: { onMonthBottomSheetOpen },
+  } = useMonthPurchaseContext();
 
   return (
     <ButtonGroup
@@ -19,10 +22,7 @@ function ToggleButtons() {
       <>
         <SmallButton
           variant="black"
-          onClick={() => {
-            dispatch({ type: "bottomSheetTypes", data: "edit-month" }),
-              bottomSheetHandler("50%");
-          }}
+          onClick={() => onMonthBottomSheetOpen()}
           image={calender}
           smallButtonStyle={
             openToggle ? style.transition2 : style.smallButtonStyle2

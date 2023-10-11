@@ -36,10 +36,12 @@ export const monthlyPurchaseInit: MonthPurchaseStatesTypes = {
   purchaseData: initialPurchaseDate,
   editTitle: false,
   title: "",
+  image: "",
   steps: 0,
   openMonthPurchase: { id: "", open: false },
   editTagsModalIsOpen: false,
   bottomSheetType: "edit-expend",
+  openGallery: false,
 };
 
 export const monthlyPurchaseState = (
@@ -70,10 +72,11 @@ export const monthlyPurchaseState = (
         steps: action.data,
       };
 
-    case "title":
+    case "purchaseInfo":
       return {
         ...state,
-        title: action.data,
+        title: action.data.title,
+        image: action.data.image,
       };
     case "editTagsModalIsOpen":
       return {
@@ -89,6 +92,11 @@ export const monthlyPurchaseState = (
       return {
         ...state,
         purchaseData: action.data,
+      };
+    case "openGallery":
+      return {
+        ...state,
+        openGallery: action.data,
       };
     default:
       break;

@@ -8,6 +8,7 @@ import { useState } from "react";
 import { images } from "../../utils/images";
 import { v4 as uuidV4 } from "uuid";
 import { getDate } from "../../utils/days";
+import ImagesGallery from "../imagesGallarey";
 
 export interface CreatePurchaseProps extends SelectTagProps {
   onSubmit: (data: RawNoteData) => void;
@@ -61,15 +62,6 @@ function CreatePurchase({
       className="d-flex flex-column align-items-center "
     >
       <Stack gap={4} className="d-flex flex-column align-items-center">
-        {/* <Image
-        // key={index}
-        src={data.image}
-        role="button"
-        width={200}
-        height={200}
-        onClick={() => setOpenModal(true)}
-      /> */}
-
         <FormInput
           label="Title"
           placeholder="Title"
@@ -98,22 +90,10 @@ function CreatePurchase({
             />
           </div>
         </Stack>
-
-        <Stack className="d-flex flex-wrap flex-row " gap={2}>
-          {images.map((image, index) => (
-            <Image
-              key={index}
-              src={image}
-              role="button"
-              width={130}
-              height={130}
-              onClick={() => setData((prev) => ({ ...prev, image }))}
-              className={`border ${
-                data.image === image ? ` border-2 border-primary` : `border`
-              } `}
-            />
-          ))}
-        </Stack>
+        <ImagesGallery
+          onClick={(image) => setData((prev) => ({ ...prev, image }))}
+          currentImage={data.image}
+        />
         <Button variant="success" type="submit">
           Submit
         </Button>

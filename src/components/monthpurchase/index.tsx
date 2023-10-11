@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { Stack } from "react-bootstrap";
+import { Modal, Stack } from "react-bootstrap";
 import style from "./monthPurchase.module.css";
 import EditTagModal from "./header/EditTagModal";
 import { Note, NoteData, Purchase, Tag } from "../../App";
@@ -8,6 +8,7 @@ import MonthPurchaseHeader from "./header";
 import MonthPurchaseBody from "./body/monthPurchaseBody";
 import { useNote } from "../../hook/useNote";
 import ToggleButtons from "./toggleButtons";
+import GalleryModal from "./header/galleryModal";
 
 interface MonthlyPurchaseProps {
   selectedTags: Tag[];
@@ -31,7 +32,6 @@ function MonthlyPurchase({
 }: MonthlyPurchaseProps) {
   const note = useNote();
 
-  console.log(note);
   return (
     <MonthPurchaseContextProvider {...{ onUpdate }}>
       <Stack
@@ -56,6 +56,7 @@ function MonthlyPurchase({
             onUpdate(note.id, { ...note, tags: orderedTags });
           }}
         />
+        <GalleryModal />
         <ToggleButtons />
       </Stack>
     </MonthPurchaseContextProvider>

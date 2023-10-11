@@ -3,13 +3,13 @@
     min-width: 400px;
     height: inherit;
     padding-top: 16px;
-    background: linear-gradient(
+    /* background: linear-gradient(
     to top,
     white 0%,
     white 60%,
     #7976FF 40%,
     #7976FF 100%
-  );
+  ); */
 }
 
 .container{

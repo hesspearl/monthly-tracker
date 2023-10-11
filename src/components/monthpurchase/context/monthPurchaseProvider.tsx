@@ -32,6 +32,8 @@ export const MonthPurchaseContextProvider = ({
       editTagsModalIsOpen,
       bottomSheetType,
       purchaseData,
+      image,
+      openGallery,
     },
     dispatch,
   ] = useReducer(monthlyPurchaseState, {
@@ -266,6 +268,8 @@ export const MonthPurchaseContextProvider = ({
   return (
     <MonthPurchaseContext.Provider
       value={{
+        openGallery,
+        image,
         bottomSheetType,
         daily,
         monthly,

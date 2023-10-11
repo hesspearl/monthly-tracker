@@ -4,10 +4,23 @@ import edit from "../../../assets/setting.svg";
 import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
 import { Link } from "react-router-dom";
 function MonthPurchaseHeader() {
-  const { editTitle, note, dispatch, title, editTitleHandler } =
+  const { editTitle, note, dispatch, title, editTitleHandler, image } =
     useMonthPurchaseContext();
+
   return (
-    <Row className="align-items-center px-4 mb-4" style={{}}>
+    <Row className="justify-content-center px-4">
+      <div
+        style={{
+          backgroundImage: `url(../../../${note.image})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundPositionY: "10%",
+          height: "30%",
+          zIndex: -1,
+          opacity: 0.5,
+          position: "absolute",
+        }}
+      />
       <Col>
         <Stack gap={1} direction="horizontal" className=" flex-wrap ">
           <h1>Expends Target :</h1>
@@ -18,7 +31,10 @@ function MonthPurchaseHeader() {
               <Form.Control
                 required
                 onChange={(e) =>
-                  dispatch({ type: "title", data: e.target.value })
+                  dispatch({
+                    type: "purchaseInfo",
+                    data: { image, title: e.target.value },
+                  })
                 }
                 value={title}
                 className={"ms-5"}
@@ -51,7 +67,16 @@ function MonthPurchaseHeader() {
             }
           />
         </Stack>
+        <Stack className="mt-5" style={{ width: "fit-content" }}>
+          <Button
+            variant="outline-primary"
+            onClick={() => dispatch({ type: "openGallery", data: true })}
+          >
+            Edit Image
+          </Button>
+        </Stack>
       </Col>
+      <Col xs="auto"></Col>
       <Col xs="auto">
         <Stack className="mt-5">
           <Link to={`/`}>

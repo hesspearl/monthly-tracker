@@ -12,6 +12,7 @@ type BottomSheetTypes =
 export type MonthPurchaseStatesTypes = {
   editTitle: boolean;
   title: string;
+  image: string;
   steps: number;
   openMonthPurchase: {
     id: string;
@@ -21,12 +22,14 @@ export type MonthPurchaseStatesTypes = {
   editTagsModalIsOpen: boolean;
   bottomSheetType: BottomSheetTypes;
   purchaseData: PurchaseProps;
+  openGallery: boolean;
 };
 
 export type MonthPurchaseActionTypes =
   | { type: "expendData"; data: ExpendsProps }
   | { type: "editTitle"; data: boolean }
-  | { type: "title"; data: string }
+  | { type: "openGallery"; data: boolean }
+  | { type: "purchaseInfo"; data: { title: string; image: string } }
   | { type: "steps"; data: number }
   | { type: "editTagsModalIsOpen"; data: boolean }
   | { type: "bottomSheetTypes"; data: BottomSheetTypes }

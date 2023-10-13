@@ -3,6 +3,7 @@ import edit from "../../../assets/setting.svg";
 
 import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 function MonthPurchaseHeader() {
   const { editTitle, note, dispatch, title, editTitleHandler, image } =
     useMonthPurchaseContext();
@@ -11,10 +12,14 @@ function MonthPurchaseHeader() {
     <Row className="justify-content-center px-4">
       <div
         style={{
-          backgroundImage: `url(../../../${note.image})`,
+          backgroundImage: `url(../../../${image})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
-          backgroundPositionY: "10%",
+          backgroundPositionY: image.includes("checkListWithClothes")
+            ? "70%"
+            : image.includes("checklistwithMoney")
+            ? "30%"
+            : "10%",
           height: "30%",
           zIndex: -1,
           opacity: 0.5,

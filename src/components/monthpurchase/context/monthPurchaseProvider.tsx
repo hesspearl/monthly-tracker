@@ -39,6 +39,7 @@ export const MonthPurchaseContextProvider = ({
   ] = useReducer(monthlyPurchaseState, {
     ...monthlyPurchaseInit,
     title: note.title,
+    image: note.image,
   });
 
   const editTitleHandler = () => {
@@ -51,6 +52,15 @@ export const MonthPurchaseContextProvider = ({
     dispatch({ type: "editTitle", data: false });
   };
 
+  const editImageHandler = () => {
+    // if (!editTitle) {
+    //   dispatch({ type: "editTitle", data: true });
+
+    //   return;
+    // }
+    onUpdate(note.id, { ...note, image });
+    dispatch({ type: "openGallery", data: false });
+  };
   const bottomSheetHandler = (height: string, close?: boolean) => {
     const bottomSheetElement = window.document.getElementById("bottomSheet");
     if (bottomSheetElement) {
@@ -62,11 +72,6 @@ export const MonthPurchaseContextProvider = ({
       }
       bottomSheetElement.style.height = height;
       bottomSheetElement.style.display = `flex`;
-      console.log({
-        height: bottomSheetElement.style.height,
-        display: bottomSheetElement.style.display,
-        elemet: bottomSheetElement.style,
-      });
     }
   };
 
@@ -268,6 +273,7 @@ export const MonthPurchaseContextProvider = ({
   return (
     <MonthPurchaseContext.Provider
       value={{
+        editImageHandler,
         openGallery,
         image,
         bottomSheetType,

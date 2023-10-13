@@ -6,7 +6,6 @@ export const useDelay = (time: number) => {
   useEffect(() => {
     if (startLoadActive) {
       setTimeout(() => {
-        console.log({ loadActive, time });
         setLoadActive(true);
         setStartLoadActive(false);
       }, time);

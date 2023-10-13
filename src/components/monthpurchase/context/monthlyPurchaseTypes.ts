@@ -47,6 +47,7 @@ type MonthPurchaseFunctionsTypes = {
   bottomSheetHandler: (height: string, close?: boolean) => void;
   daily: DailyProps;
   monthly: MonthlyProps;
+  editImageHandler: () => void;
 };
 
 export type MonthlyProps = {

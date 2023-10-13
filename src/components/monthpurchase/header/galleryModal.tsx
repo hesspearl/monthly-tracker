@@ -1,23 +1,37 @@
-import { Modal } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
 import ImagesGallery from "../../imagesGallarey";
 
 function GalleryModal() {
-  const { openGallery, dispatch } = useMonthPurchaseContext();
+  const { openGallery, dispatch, image, title, editImageHandler, note } =
+    useMonthPurchaseContext();
+  const handleCloseModal = () => dispatch({ type: "openGallery", data: false });
 
-  console.log(openGallery);
+  const onSubmit = () => {
+    editImageHandler();
+    handleCloseModal();
+  };
+
   return (
-    <Modal
-      show={openGallery}
-      onHide={() => dispatch({ type: "openGallery", data: false })}
-      scrollable
-      //  dialogClassName={styles.dialog}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>Track Expense</Modal.Title>
+    <Modal show={openGallery} onHide={handleCloseModal}>
+      <Modal.Header
+        closeButton
+        onHide={() =>
+          dispatch({ type: "purchaseInfo", data: { title, image: note.image } })
+        }
+      >
+        <Modal.Title>Gallery</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <ImagesGallery />
+      <Modal.Body className="d-flex flex-column align-items-center ">
+        <ImagesGallery
+          onClick={(img) =>
+            dispatch({ type: "purchaseInfo", data: { title, image: img } })
+          }
+          currentImage={image}
+        />
+        <Button onClick={onSubmit} className="mt-3">
+          submit
+        </Button>
       </Modal.Body>
     </Modal>
   );

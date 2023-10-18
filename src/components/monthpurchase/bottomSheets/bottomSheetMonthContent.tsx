@@ -1,5 +1,5 @@
 import BottomSheet from "../../bottomSheet/BottomSheet";
-import { CloseButton, Form, Image, Stack } from "react-bootstrap";
+import { CloseButton, Form, Image } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
@@ -84,7 +84,7 @@ function BottomSheetMonthContent() {
           }}
           // value={purchaseData.month.toString()}
           selected={purchaseData.date}
-          renderMonthContent={(index, month, longMonth) => (
+          renderMonthContent={(_index, _month, longMonth) => (
             <span>{longMonth}</span>
           )}
           showMonthYearPicker

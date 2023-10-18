@@ -7,10 +7,6 @@ interface BottomSheetContextProps<T> {
 const BottomSheetContext =
   createContext<BottomSheetContextProps<object> | null>(null);
 
-const BottomSheetContextProvider = () => {
-  const nefunc = () => true;
-};
-
 export const useBottomSheetContext = () => {
   const context = useContext(BottomSheetContext);
 

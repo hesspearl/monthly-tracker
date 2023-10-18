@@ -1,6 +1,4 @@
-import React from "react";
 import { Form, FormControlProps } from "react-bootstrap";
-import { FeedbackProps } from "react-bootstrap/esm/Feedback";
 
 function BottomSheetInput({
   title,

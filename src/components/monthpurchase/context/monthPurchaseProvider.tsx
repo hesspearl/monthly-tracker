@@ -1,4 +1,4 @@
-import { ReactNode, useReducer, useState } from "react";
+import { ReactNode, useReducer } from "react";
 import { useNote } from "../../../hook/useNote";
 import { v4 as uuidV4 } from "uuid";
 import { ExpendsProps } from "../bottomSheets/bottomSheetContent";

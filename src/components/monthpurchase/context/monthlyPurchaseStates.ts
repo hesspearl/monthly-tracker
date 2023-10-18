@@ -5,11 +5,7 @@ import {
   MonthPurchaseStatesTypes,
 } from "./monthlyPurchaseTypes";
 
-const {
-  year: selectedYear,
-  month: selectedDateOfMonth,
-  currentMonth,
-} = getDate;
+const { year: selectedYear, month: selectedDateOfMonth } = getDate;
 
 export const initialExpendData: ExpendsProps = {
   month: selectedDateOfMonth,

@@ -1,10 +1,9 @@
-import React, { Dispatch, SetStateAction, useMemo } from "react";
+import { useMemo } from "react";
 import { CloseButton, Dropdown } from "react-bootstrap";
 import { Day, Months, getDate } from "../../../utils/days";
 import check from "../../../assets/check.svg";
 import calender from "../../../assets/calendar-alt.svg";
-import cart from "../../../assets/cart-plus.svg";
-import { useNote } from "../../../hook/useNote";
+
 import { SmallButton } from "../../button";
 import BottomSheet from "../../bottomSheet/BottomSheet";
 import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
@@ -67,13 +66,13 @@ function BottomSheetDayContent() {
     onEditExpendBottomSheetClose();
   };
 
-  const onNewPurchase = () => {
-    if (typeof expendData.amount !== "number") {
-      return;
-    }
-    onCreateExpend(expendData);
-    dispatch({ type: "expendData", data: { ...expendData, amount: "" } });
-  };
+  // const onNewPurchase = () => {
+  //   if (typeof expendData.amount !== "number") {
+  //     return;
+  //   }
+  //   onCreateExpend(expendData);
+  //   dispatch({ type: "expendData", data: { ...expendData, amount: "" } });
+  // };
 
   const buttonsList = [
     {

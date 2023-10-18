@@ -1,10 +1,10 @@
 import style from "../monthPurchase.module.css";
 import { Expends, Purchase } from "../../../App";
 import { SpringValue, animated, useSprings } from "@react-spring/web";
-import { useDrag, useGesture } from "react-use-gesture";
+import { useGesture } from "react-use-gesture";
 import edit from "../../../assets/pencil-alt.svg";
 import bin from "../../../assets/trash-alt.svg";
-import { Day, Months } from "../../../utils/days";
+import { Months } from "../../../utils/days";
 import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
 
 export const left = {
@@ -32,7 +32,7 @@ function DailyRow({
     },
     dispatch,
   } = useMonthPurchaseContext();
-  const [props, api] = useSprings(expends.length, (i) => ({
+  const [props, api] = useSprings(expends.length, () => ({
     x: 0,
     display: "none",
     opacity: 0,

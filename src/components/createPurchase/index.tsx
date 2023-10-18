@@ -1,8 +1,7 @@
-import PageTitle from "../pageTitle";
-import { NoteData, RawNoteData, Tag } from "../../App";
+import { RawNoteData } from "../../App";
 import FormInput from "../formInput";
 import SelectTags, { SelectTagProps } from "../selectTags";
-import { Button, Form, Image, Stack } from "react-bootstrap";
+import { Button, Form, Stack } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { images } from "../../utils/images";

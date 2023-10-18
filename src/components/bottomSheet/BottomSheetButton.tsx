@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { BigButton } from "../button";
 import { Image } from "react-bootstrap";
 

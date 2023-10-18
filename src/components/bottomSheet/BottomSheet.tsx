@@ -1,12 +1,12 @@
 import { CSSProperties, ReactNode } from "react";
 import style from "./BottomSheet.module.css";
 import { Stack } from "react-bootstrap";
-import BottomSheetContext from "./BottomSheetContext";
+
 import BottomSheetInput from "./BottomSheetInput";
 import BottomSheetDropDown from "./BottomSheetDropDown";
 import BottomSheetButton from "./BottomSheetButton";
 
-interface BottomSheetProps<T> {
+interface BottomSheetProps {
   closeButton: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
@@ -14,14 +14,14 @@ interface BottomSheetProps<T> {
   headerStyle?: CSSProperties;
   footerStyle?: CSSProperties;
 }
-function BottomSheet<T extends object>({
+function BottomSheet({
   closeButton,
   children,
-  containerStyle,
+
   footer,
   footerStyle,
   headerStyle,
-}: BottomSheetProps<T>) {
+}: BottomSheetProps) {
   return (
     <>
       <div

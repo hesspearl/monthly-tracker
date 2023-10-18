@@ -1,4 +1,3 @@
-import React from "react";
 import BottomSheet from "../../bottomSheet/BottomSheet";
 import { CloseButton } from "react-bootstrap";
 import bin from "../../../assets/trash-alt.svg";

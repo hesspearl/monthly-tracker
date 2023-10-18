@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 import { Dropdown, Form, Stack } from "react-bootstrap";
 import style from "./BottomSheet.module.css";
 

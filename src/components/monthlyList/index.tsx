@@ -18,7 +18,6 @@ import CreatePurchase, { CreatePurchaseProps } from "../createPurchase";
 import styles from "./monthlyList.module.css";
 import { getDate } from "../../utils/days";
 import check from "../../assets/check.svg";
-import EditTagModal from "../monthpurchase/header/EditTagModal";
 
 export type MonthlyListProps = {
   notes: MonthlyCardProps[];

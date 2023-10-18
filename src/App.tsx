@@ -1,26 +1,23 @@
-import { useEffect, useMemo, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { Container, Toast } from "react-bootstrap";
+import { useMemo, useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import MonthlyList from "./components/monthlyList";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./app.css";
 import { useLocalStorage } from "./hook/useLocalStorage";
 import NoteLayout from "./components/monthlyPageLayout";
 import MonthlyPurchase from "./components/monthpurchase";
-import CreatePurchase from "./components/createPurchase";
 import { v4 as uuidV4 } from "uuid";
-import CreateNewPurchase from "./components/createNewPurchase";
 import { Months, getDate } from "./utils/days";
 
-interface StringValidator {
-  isAcceptable(s: string): boolean;
-}
-const lettersRegexp = /^[A-Za-z]+$/;
-class LettersOnlyValidator implements StringValidator {
-  isAcceptable(s: string) {
-    return lettersRegexp.test(s);
-  }
-}
+// interface StringValidator {
+//   isAcceptable(s: string): boolean;
+// }
+// const lettersRegexp = /^[A-Za-z]+$/;
+// class LettersOnlyValidator implements StringValidator {
+//   isAcceptable(s: string) {
+//     return lettersRegexp.test(s);
+//   }
+// }
 
 export type Tag = {
   id: string;
@@ -180,17 +177,6 @@ function App() {
               />
             }
           />
-          <Route path="new" element={<CreateNewPurchase />} />
-          {/* <Route
-            path="edit"
-            element={
-              <EditNotes
-                onSubmit={onUpdateNote}
-                onAddTag={onAddTag}
-                availableTags={tags}
-              />
-            }
-          />  */}
         </Route>
       </Routes>
     </>

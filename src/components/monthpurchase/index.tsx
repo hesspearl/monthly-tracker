@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
-import { Modal, Stack } from "react-bootstrap";
+import { Stack } from "react-bootstrap";
 import style from "./monthPurchase.module.css";
 import EditTagModal from "./header/EditTagModal";
-import { Note, NoteData, Purchase, Tag } from "../../App";
+import { Note, NoteData, Tag } from "../../App";
 import { MonthPurchaseContextProvider } from "./context/monthPurchaseProvider";
 import MonthPurchaseHeader from "./header";
 import MonthPurchaseBody from "./body/monthPurchaseBody";

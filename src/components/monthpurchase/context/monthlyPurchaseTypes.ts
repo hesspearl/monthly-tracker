@@ -1,6 +1,6 @@
 import { Dispatch } from "react";
 import { ExpendsProps } from "../bottomSheets/bottomSheetContent";
-import { Note, Purchase } from "../../../App";
+import { Note } from "../../../App";
 import { PurchaseProps } from "../bottomSheets/bottomSheetMonthContent";
 
 type BottomSheetTypes =

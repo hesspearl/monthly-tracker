@@ -1,14 +1,8 @@
-import { Button, Col, Form, Modal, Row, Stack } from "react-bootstrap";
+import { Button, Modal, Stack } from "react-bootstrap";
 import { MonthlyListProps } from "../../monthlyList";
 import SelectTags, { SelectTagProps } from "../../selectTags";
 import { Tag } from "../../../App";
-import {
-  DragDropContext,
-  Draggable,
-  DropResult,
-  Droppable,
-  OnDragEndResponder,
-} from "react-beautiful-dnd";
+import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
 import { StrictModeDroppable } from "../../StaticDroppable";
 import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
 
@@ -53,11 +47,11 @@ function EditTagModal({
       <Modal.Body>
         <DragDropContext onDragEnd={onDragEnd}>
           <StrictModeDroppable droppableId="droppable">
-            {(droppableProvided, droppableSnapshot) => (
+            {(droppableProvided) => (
               <Stack gap={2} ref={droppableProvided.innerRef}>
                 {expendTags.map((tag, index) => (
                   <Draggable key={tag.id} draggableId={tag.id} index={index}>
-                    {(draggableProvided, draggableSnapshot) => (
+                    {(draggableProvided) => (
                       <div
                         className="border rounded d-flex  justify-content-between align-items-center px-2 "
                         ref={draggableProvided.innerRef}

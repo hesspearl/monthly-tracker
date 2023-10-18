@@ -1,8 +1,7 @@
-import { Note, Tag } from "../../App";
+import { Note } from "../../App";
 import { Badge, Card, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styles from "./monthlyCard.module.css";
-import CarImage from "../../assets/checklistwithcars.jpg";
 
 export type MonthlyCardProps = Note;
 

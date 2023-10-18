@@ -44,12 +44,12 @@ function MonthPurchaseBody() {
               </div>
             );
           })}
+          <div className={`${style.bottomSheet} `} id="bottomSheet">
+            {bottomSheetType === "edit-expend" && <BottomSheetDayContent />}
+            {bottomSheetType === "delete-Expend" && <BottomSheetDeleteDayRow />}
+            {bottomSheetType === "edit-month" && <BottomSheetMonthContent />}
+          </div>
         </Stack>
-        <div className={`${style.bottomSheet} `} id="bottomSheet">
-          {bottomSheetType === "edit-expend" && <BottomSheetDayContent />}
-          {bottomSheetType === "delete-Expend" && <BottomSheetDeleteDayRow />}
-          {bottomSheetType === "edit-month" && <BottomSheetMonthContent />}
-        </div>
       </Stack>
     </div>
   );

@@ -18,6 +18,7 @@ function ToggleButtons() {
     <ButtonGroup
       vertical
       className="position-fixed bottom-0 end-0 m-4 align-items-center"
+      style={{ zIndex: 10 }}
     >
       <>
         <SmallButton

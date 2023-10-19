@@ -3,6 +3,7 @@ import style from "../monthPurchase.module.css";
 import edit from "../../../assets/setting.svg";
 
 import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
+import { Expends } from "../../../App";
 function MonthlyRow({
   current,
   month,
@@ -12,6 +13,7 @@ function MonthlyRow({
   onMonthClick,
   id,
   date,
+  expends,
 }: {
   current?: boolean;
   month: string;
@@ -21,6 +23,7 @@ function MonthlyRow({
   onMonthClick: () => void;
   id: string;
   date: Date;
+  expends: Expends[];
 }) {
   const {
     dispatch,
@@ -32,12 +35,12 @@ function MonthlyRow({
     dispatch({
       type: "purchaseData",
       data: {
-        ...purchaseData,
         monthId: id,
         total,
         year,
         month,
         remain,
+        expends,
         date: new Date(date),
       },
     });

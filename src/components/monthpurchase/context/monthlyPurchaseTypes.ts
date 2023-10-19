@@ -62,6 +62,7 @@ export type MonthlyProps = {
 export type DailyProps = {
   onEditExpendBottomSheetClose: () => void;
   openEditExpendBottomSheet: () => void;
+  onDayBottomSheetOpen: () => void;
   onCreateExpend: (data: ExpendsProps) => void;
   onUpdateExpends: (data: ExpendsProps) => void;
   onDeleteExpendBottomSheetOpen: () => void;

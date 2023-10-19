@@ -4,8 +4,14 @@ function BottomSheetInput({
   title,
   required,
   min,
+  errorMessage,
   ...formControlProps
-}: { title: string; required?: boolean; min?: number } & FormControlProps) {
+}: {
+  title: string;
+  required?: boolean;
+  min?: number;
+  errorMessage?: string;
+} & FormControlProps) {
   return (
     <Form.Group
       controlId="title"
@@ -22,8 +28,12 @@ function BottomSheetInput({
           padding: 0,
           textAlign: "center",
         }}
+
         //  placeholder={placeholder}
       />
+      <Form.Control.Feedback type="invalid">
+        {errorMessage}
+      </Form.Control.Feedback>
     </Form.Group>
   );
 }

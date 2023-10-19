@@ -99,7 +99,7 @@ function DailyRow({
           <animated.div
             key={expends[i].id}
             className={` ${style.monthContainer}`}
-            style={{ background: left.bg, position: "relative" }}
+            style={{ background: left.bg, position: "relative", marginTop: 5 }}
           >
             <Image img={edit} direction="left" {...{ opacity, display }} />
             <Image img={bin} direction="right" {...{ opacity, display }} />

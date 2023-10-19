@@ -9,7 +9,7 @@ import check from "../../../assets/check.svg";
 import bin from "../../../assets/trash-alt.svg";
 import { Expends } from "../../../App";
 import { Months } from "../../../utils/days";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { initialPurchaseDate } from "../context/monthlyPurchaseStates";
 
 export type PurchaseProps = {
@@ -33,6 +33,7 @@ function BottomSheetMonthContent() {
     dispatch,
     purchaseData,
   } = useMonthPurchaseContext();
+  const [isInvalid, setIsInvalid] = useState(false);
 
   const excludedDate = useMemo(
     () => note.purchases.map((purchase) => new Date(purchase?.date)),
@@ -54,6 +55,23 @@ function BottomSheetMonthContent() {
     dispatch({ type: "purchaseData", data: initialPurchaseDate });
   };
 
+  const handleEditTotal = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const currentTotal = Number(e.target.value);
+    const amount = purchaseData.expends.reduce((total, value) => {
+      return total + value.amount;
+    }, 0);
+    setIsInvalid(amount > currentTotal);
+
+    dispatch({
+      type: "purchaseData",
+      data: {
+        ...purchaseData,
+        total: currentTotal,
+        remain: currentTotal,
+      },
+    });
+  };
+
   return (
     <BottomSheet
       closeButton={
@@ -61,6 +79,7 @@ function BottomSheetMonthContent() {
           onClick={() => {
             onMonthBottomSheetClose(),
               dispatch({ type: "purchaseData", data: initialPurchaseDate });
+            setIsInvalid(false);
           }}
         />
       }
@@ -94,21 +113,20 @@ function BottomSheetMonthContent() {
       <BottomSheet.input
         title="Choose planing total"
         type="number"
+        isInvalid={isInvalid}
+        errorMessage=" the amount is too low!"
         min={0}
         value={purchaseData.total.toString()}
-        onChange={(e) =>
-          dispatch({
-            type: "purchaseData",
-            data: {
-              ...purchaseData,
-              total: Number(e.target.value),
-              remain: Number(e.target.value),
-            },
-          })
-        }
+        onChange={handleEditTotal}
       />
+
       <div className="d-flex flex-row align-items-center">
-        <BigButton bigButtonStyle="m-2" variant="#B6B5ED" onClick={handleClick}>
+        <BigButton
+          disable={isInvalid}
+          bigButtonStyle="m-2"
+          variant="#B6B5ED"
+          onClick={handleClick}
+        >
           <Image src={check} />
         </BigButton>
         {purchaseData.monthId && (

@@ -135,17 +135,21 @@ export const MonthPurchaseContextProvider = ({
     year,
     date,
   }: PurchaseProps) => {
-    const updatedPurchase = note.purchases.map((purchase) =>
-      purchase.id === monthId
-        ? {
-            ...purchase,
-            total,
-            month,
-            year,
-            date: date!,
-          }
-        : purchase
-    );
+    const updatedPurchase = note.purchases.map((purchase) => {
+      if (purchase.id === monthId) {
+        const totalDifferent = purchase.total - total;
+
+        return {
+          ...purchase,
+          remain: purchase.remain - totalDifferent,
+          total,
+          month,
+          year,
+          date: date!,
+        };
+      }
+      return purchase;
+    });
 
     sortPurchase(updatedPurchase);
     onUpdate(note.id, {
@@ -165,6 +169,14 @@ export const MonthPurchaseContextProvider = ({
     });
   };
 
+  const onDayBottomSheetOpen = () => {
+    dispatch({
+      type: "openMonthPurchase",
+      data: { id: "", open: false },
+    }),
+      dispatch({ type: "bottomSheetTypes", data: "edit-expend" }),
+      bottomSheetHandler("25%");
+  };
   const onUpdateExpends = (data: ExpendsProps) => {
     const updatedPurchases = note.purchases.map((purchase) => {
       if (data.monthId === purchase.id) {
@@ -249,7 +261,7 @@ export const MonthPurchaseContextProvider = ({
 
   const onMonthBottomSheetOpen = () => {
     dispatch({ type: "bottomSheetTypes", data: "edit-month" }),
-      bottomSheetHandler("50%");
+      bottomSheetHandler("55%");
   };
   const monthly: MonthlyProps = {
     onOpenMonthClicked,
@@ -263,6 +275,7 @@ export const MonthPurchaseContextProvider = ({
   const daily: DailyProps = {
     onEditExpendBottomSheetClose,
     openEditExpendBottomSheet,
+    onDayBottomSheetOpen,
     onCreateExpend,
     onUpdateExpends,
     onDeleteExpendBottomSheetOpen,

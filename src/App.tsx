@@ -64,12 +64,15 @@ export type Expends = {
   amount: number;
 };
 function App() {
-  const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", []);
+  const [purchasesData, setPurchases] = useLocalStorage<RawNote[]>(
+    "PURCHASES",
+    []
+  );
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const { currentMonth } = getDate;
   const onCreateNote = ({ ...data }: RawNoteData) => {
-    setNotes((prevNotes) => [...prevNotes, { ...data, id: uuidV4() }]);
+    setPurchases((prevNotes) => [...prevNotes, { ...data, id: uuidV4() }]);
   };
 
   function onUpdate(id: string, { ...data }: NoteData): void {
@@ -77,7 +80,7 @@ function App() {
       ...data,
       total: data.purchases[0].remain,
     };
-    setNotes((prevNotes) =>
+    setPurchases((prevNotes) =>
       prevNotes.map((note) => {
         if (note.id === id) {
           return { ...note, ...updateData };
@@ -109,7 +112,7 @@ function App() {
   };
 
   function onDeleteNoteTag(id: string, tagId: string): void {
-    setNotes((prevNotes) =>
+    setPurchases((prevNotes) =>
       prevNotes.map((note) => {
         if (note.id === id) {
           return {
@@ -125,7 +128,7 @@ function App() {
 
   const notesWithTags = useMemo(
     () =>
-      notes.map((note) => {
+      purchasesData.map((note) => {
         const currentMonthPurchase = note.purchases.find(
           (purchase) => purchase.month === currentMonth
         );
@@ -133,10 +136,10 @@ function App() {
         return {
           ...note,
           total: currentMonthPurchase ? currentMonthPurchase.remain : 0,
-          tags: tags.filter((tag) => note.tagsIds.includes(tag.id)),
+          tags: tags.filter((tag) => note.tagsIds?.includes(tag.id)),
         };
       }),
-    [notes, currentMonth, tags]
+    [purchasesData, currentMonth, tags]
   );
 
   return (

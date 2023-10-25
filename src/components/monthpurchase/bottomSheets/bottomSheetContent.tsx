@@ -23,7 +23,7 @@ export type ExpendsProps = {
 
 function BottomSheetDayContent() {
   const {
-    note,
+    transaction,
     expendData,
     steps,
     daily: { onUpdateExpends, onCreateExpend, onEditExpendBottomSheetClose },
@@ -146,7 +146,7 @@ function BottomSheetDayContent() {
         }
         containerStyle={{ display: "flex" }}
         menuStyle={{ height: "auto" }}
-        menuContent={note.purchases.map((purchase) => (
+        menuContent={transaction.purchases.map((purchase) => (
           <Dropdown.Item
             key={purchase.id}
             disabled={purchase.remain === 0}

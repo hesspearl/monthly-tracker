@@ -3,7 +3,7 @@ import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
 import ImagesGallery from "../../imagesGallarey";
 
 function GalleryModal() {
-  const { openGallery, dispatch, image, title, editImageHandler, note } =
+  const { openGallery, dispatch, image, title, editImageHandler, transaction } =
     useMonthPurchaseContext();
   const handleCloseModal = () => dispatch({ type: "openGallery", data: false });
 
@@ -17,7 +17,10 @@ function GalleryModal() {
       <Modal.Header
         closeButton
         onHide={() =>
-          dispatch({ type: "purchaseInfo", data: { title, image: note.image } })
+          dispatch({
+            type: "purchaseInfo",
+            data: { title, image: transaction.image },
+          })
         }
       >
         <Modal.Title>Gallery</Modal.Title>

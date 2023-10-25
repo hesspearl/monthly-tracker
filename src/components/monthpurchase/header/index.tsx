@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import styles from "../monthPurchase.module.css";
 
 function MonthPurchaseHeader() {
-  const { editTitle, note, dispatch, title, editTitleHandler, image } =
+  const { editTitle, transaction, dispatch, title, editTitleHandler, image } =
     useMonthPurchaseContext();
 
   return (
@@ -29,7 +29,7 @@ function MonthPurchaseHeader() {
           <Stack gap={1} direction="horizontal" className=" flex-wrap ">
             <h1>Expends Target :</h1>
             {!editTitle ? (
-              <h1>{note.title}</h1>
+              <h1>{transaction.title}</h1>
             ) : (
               <Form>
                 <Form.Control
@@ -50,8 +50,8 @@ function MonthPurchaseHeader() {
 
           <Stack gap={1} direction="horizontal" className=" flex-wrap ">
             <h1>Tags :</h1>
-            {note?.tags?.length > 0 &&
-              note.tags.map((tag) => (
+            {transaction?.tags?.length > 0 &&
+              transaction.tags.map((tag) => (
                 <Badge
                   key={tag.id}
                   bg="secondary"

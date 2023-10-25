@@ -7,7 +7,7 @@ import { StrictModeDroppable } from "../../StaticDroppable";
 import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
 
 interface EditTagModalProps
-  extends Omit<MonthlyListProps, "notes" | "onSubmit">,
+  extends Omit<MonthlyListProps, "Transactions" | "onSubmit">,
     SelectTagProps {
   expendTags: Tag[];
   onUpdateExpendTags: () => void;

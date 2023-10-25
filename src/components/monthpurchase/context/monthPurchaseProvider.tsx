@@ -1,8 +1,8 @@
 import { ReactNode, useReducer } from "react";
-import { useNote } from "../../../hook/useNote";
+import { useTransaction } from "../../../hook/useTransaction";
 import { v4 as uuidV4 } from "uuid";
 import { ExpendsProps } from "../bottomSheets/bottomSheetContent";
-import { NoteData, Purchase } from "../../../App";
+import { TransactionData, Purchase } from "../../../App";
 import MonthPurchaseContext from "./monthPurchaseContext";
 import { DailyProps, MonthlyProps } from "./monthlyPurchaseTypes";
 import {
@@ -18,9 +18,9 @@ export const MonthPurchaseContextProvider = ({
   onUpdate,
 }: {
   children: ReactNode;
-  onUpdate: (id: string, data: NoteData) => void;
+  onUpdate: (id: string, data: TransactionData) => void;
 }) => {
-  const note = useNote();
+  const transaction = useTransaction();
 
   const [
     {
@@ -38,8 +38,8 @@ export const MonthPurchaseContextProvider = ({
     dispatch,
   ] = useReducer(monthlyPurchaseState, {
     ...monthlyPurchaseInit,
-    title: note.title,
-    image: note.image,
+    title: transaction.title,
+    image: transaction.image,
   });
 
   const editTitleHandler = () => {
@@ -48,7 +48,7 @@ export const MonthPurchaseContextProvider = ({
 
       return;
     }
-    onUpdate(note.id, { ...note, title });
+    onUpdate(transaction.id, { ...transaction, title });
     dispatch({ type: "editTitle", data: false });
   };
 
@@ -58,7 +58,7 @@ export const MonthPurchaseContextProvider = ({
 
     //   return;
     // }
-    onUpdate(note.id, { ...note, image });
+    onUpdate(transaction.id, { ...transaction, image });
     dispatch({ type: "openGallery", data: false });
   };
   const bottomSheetHandler = (height: string, close?: boolean) => {
@@ -76,7 +76,7 @@ export const MonthPurchaseContextProvider = ({
   };
 
   const onCreateExpend = (data: ExpendsProps) => {
-    const updatedPurchases = note.purchases.map((purchase) => {
+    const updatedPurchases = transaction.purchases.map((purchase) => {
       if (data.monthId === purchase.id) {
         const amount = data.amount as number;
         if (purchase.remain < amount) return purchase;
@@ -96,7 +96,7 @@ export const MonthPurchaseContextProvider = ({
         return updateMonthPurchase;
       } else return purchase;
     });
-    onUpdate(note.id, { ...note, purchases: updatedPurchases });
+    onUpdate(transaction.id, { ...transaction, purchases: updatedPurchases });
   };
 
   const sortPurchase = (array: Purchase[]) => {
@@ -117,13 +117,13 @@ export const MonthPurchaseContextProvider = ({
     date,
   }: PurchaseProps) => {
     const updatedPurchase = [
-      ...note.purchases,
+      ...transaction.purchases,
       { id: uuidV4(), remain, total, month, year, expends, date: date! },
     ];
 
     sortPurchase(updatedPurchase);
-    onUpdate(note.id, {
-      ...note,
+    onUpdate(transaction.id, {
+      ...transaction,
       purchases: updatedPurchase,
     });
   };
@@ -135,7 +135,7 @@ export const MonthPurchaseContextProvider = ({
     year,
     date,
   }: PurchaseProps) => {
-    const updatedPurchase = note.purchases.map((purchase) => {
+    const updatedPurchase = transaction.purchases.map((purchase) => {
       if (purchase.id === monthId) {
         const totalDifferent = purchase.total - total;
 
@@ -152,19 +152,19 @@ export const MonthPurchaseContextProvider = ({
     });
 
     sortPurchase(updatedPurchase);
-    onUpdate(note.id, {
-      ...note,
+    onUpdate(transaction.id, {
+      ...transaction,
       purchases: updatedPurchase,
     });
   };
 
   const onDeletePurchase = (monthId: string) => {
-    const updatedPurchase = note.purchases.filter(
+    const updatedPurchase = transaction.purchases.filter(
       (purchase) => purchase.id !== monthId
     );
 
-    onUpdate(note.id, {
-      ...note,
+    onUpdate(transaction.id, {
+      ...transaction,
       purchases: updatedPurchase,
     });
   };
@@ -178,7 +178,7 @@ export const MonthPurchaseContextProvider = ({
       bottomSheetHandler("25%");
   };
   const onUpdateExpends = (data: ExpendsProps) => {
-    const updatedPurchases = note.purchases.map((purchase) => {
+    const updatedPurchases = transaction.purchases.map((purchase) => {
       if (data.monthId === purchase.id) {
         const amount = data.amount as number;
         if (purchase.remain < amount) return purchase;
@@ -200,7 +200,7 @@ export const MonthPurchaseContextProvider = ({
         return updateMonthPurchase;
       } else return purchase;
     });
-    onUpdate(note.id, { ...note, purchases: updatedPurchases });
+    onUpdate(transaction.id, { ...transaction, purchases: updatedPurchases });
   };
 
   const onOpenMonthClicked = (id: string) => {
@@ -240,7 +240,7 @@ export const MonthPurchaseContextProvider = ({
     bottomSheetHandler("0%", true);
   };
   const onDeleteExpend = (data: ExpendsProps) => {
-    const updatedPurchases = note.purchases.map((purchase) => {
+    const updatedPurchases = transaction.purchases.map((purchase) => {
       if (data.monthId === purchase.id) {
         const amount = data.amount as number;
 
@@ -254,7 +254,7 @@ export const MonthPurchaseContextProvider = ({
         return updateMonthPurchase;
       } else return purchase;
     });
-    onUpdate(note.id, { ...note, purchases: updatedPurchases });
+    onUpdate(transaction.id, { ...transaction, purchases: updatedPurchases });
     onDeleteExpendBottomSheetClose();
     dispatch({ type: "expendData", data: initialExpendData });
   };
@@ -300,7 +300,7 @@ export const MonthPurchaseContextProvider = ({
         editTitle,
         openMonthPurchase,
         editTitleHandler,
-        note,
+        transaction,
         editTagsModalIsOpen,
         purchaseData,
       }}

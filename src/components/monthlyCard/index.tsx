@@ -1,9 +1,9 @@
-import { Note } from "../../App";
+import { Transaction } from "../../App";
 import { Badge, Card, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styles from "./monthlyCard.module.css";
 
-export type MonthlyCardProps = Note;
+export type MonthlyCardProps = Transaction;
 
 function MonthlyCard({ id, title, tags, total, image }: MonthlyCardProps) {
   return (

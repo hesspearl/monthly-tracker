@@ -4,7 +4,7 @@ import MonthlyList from "./components/monthlyList";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./app.css";
 import { useLocalStorage } from "./hook/useLocalStorage";
-import NoteLayout from "./components/monthlyPageLayout";
+import TransactionLayout from "./components/monthlyPageLayout";
 import MonthlyPurchase from "./components/monthpurchase";
 import { v4 as uuidV4 } from "uuid";
 import { Months, getDate } from "./utils/days";
@@ -24,28 +24,28 @@ export type Tag = {
   label: string;
 };
 
-export type Note = {
+export type Transaction = {
   id: string;
-} & NoteData;
+} & TransactionData;
 
-export type RawNote = {
+export type RawTransaction = {
   id: string;
-} & RawNoteData;
+} & RawTransactionData;
 
-export type commonNoteData = {
+export type commonTransactionData = {
   title: string;
   total: number;
   image: string;
   purchases: Purchase[];
 };
-export type RawNoteData = {
+export type RawTransactionData = {
   tagsIds: string[];
-} & commonNoteData;
+} & commonTransactionData;
 
-export type NoteData = {
+export type TransactionData = {
   tags: Tag[];
   tagsIds: string[];
-} & commonNoteData;
+} & commonTransactionData;
 
 export type Purchase = {
   id: string;
@@ -63,29 +63,34 @@ export type Expends = {
   day: [string, string];
   amount: number;
 };
+
+const localStorageKey = "TRANSACTIONS";
+
 function App() {
-  const [purchasesData, setPurchases] = useLocalStorage<RawNote[]>(
-    "PURCHASES",
-    []
-  );
+  const [transactionData, setTransactionData] = useLocalStorage<
+    RawTransaction[]
+  >(localStorageKey, []);
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const { currentMonth } = getDate;
-  const onCreateNote = ({ ...data }: RawNoteData) => {
-    setPurchases((prevNotes) => [...prevNotes, { ...data, id: uuidV4() }]);
+  const onCreateTransaction = ({ ...data }: RawTransactionData) => {
+    setTransactionData((prevTransactions) => [
+      ...prevTransactions,
+      { ...data, id: uuidV4() },
+    ]);
   };
 
-  function onUpdate(id: string, { ...data }: NoteData): void {
-    const updateData: NoteData = {
+  function onUpdate(id: string, { ...data }: TransactionData): void {
+    const updateData: TransactionData = {
       ...data,
       total: data.purchases[0].remain,
     };
-    setPurchases((prevNotes) =>
-      prevNotes.map((note) => {
-        if (note.id === id) {
-          return { ...note, ...updateData };
+    setTransactionData((prevTransactions) =>
+      prevTransactions.map((Transaction) => {
+        if (Transaction.id === id) {
+          return { ...Transaction, ...updateData };
         } else {
-          return note;
+          return Transaction;
         }
       })
     );
@@ -111,35 +116,35 @@ function App() {
     setTags((prevTags) => prevTags.filter((tag) => tag.id !== id));
   };
 
-  function onDeleteNoteTag(id: string, tagId: string): void {
-    setPurchases((prevNotes) =>
-      prevNotes.map((note) => {
-        if (note.id === id) {
+  function onDeleteTransactionTag(id: string, tagId: string): void {
+    setTransactionData((prevTransactions) =>
+      prevTransactions.map((Transaction) => {
+        if (Transaction.id === id) {
           return {
-            ...note,
-            tagsIds: note.tagsIds.filter((tag) => tag !== tagId),
+            ...Transaction,
+            tagsIds: Transaction.tagsIds.filter((tag) => tag !== tagId),
           };
         } else {
-          return note;
+          return Transaction;
         }
       })
     );
   }
 
-  const notesWithTags = useMemo(
+  const TransactionsWithTags = useMemo(
     () =>
-      purchasesData.map((note) => {
-        const currentMonthPurchase = note.purchases.find(
+      transactionData.map((Transaction) => {
+        const currentMonthPurchase = Transaction.purchases.find(
           (purchase) => purchase.month === currentMonth
         );
 
         return {
-          ...note,
+          ...Transaction,
           total: currentMonthPurchase ? currentMonthPurchase.remain : 0,
-          tags: tags.filter((tag) => note.tagsIds?.includes(tag.id)),
+          tags: tags.filter((tag) => Transaction.tagsIds?.includes(tag.id)),
         };
       }),
-    [purchasesData, currentMonth, tags]
+    [transactionData, currentMonth, tags]
   );
 
   return (
@@ -150,8 +155,8 @@ function App() {
           element={
             <MonthlyList
               availableTags={tags}
-              notes={notesWithTags}
-              onSubmit={onCreateNote}
+              Transactions={TransactionsWithTags}
+              onSubmit={onCreateTransaction}
               {...{
                 onAddTag,
                 selectedTags,
@@ -162,20 +167,22 @@ function App() {
             />
           }
         />
-        <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
+        <Route
+          path="/:id"
+          element={<TransactionLayout Transactions={TransactionsWithTags} />}
+        >
           <Route
             index
             element={
               <MonthlyPurchase
                 availableTags={tags}
-                notes={notesWithTags}
                 {...{
                   onAddTag,
                   selectedTags,
                   setSelectedTags,
                   onUpdateTag,
                   onUpdate,
-                  onDeleteNoteTag,
+                  onDeleteTransactionTag,
                 }}
               />
             }

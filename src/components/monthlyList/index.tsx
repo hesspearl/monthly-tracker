@@ -10,7 +10,7 @@ import {
   Button,
   Image,
 } from "react-bootstrap";
-//import NotesInputs from "./NotesInputs";
+//import TransactionsInputs from "./TransactionsInputs";
 
 import MonthlyCard, { MonthlyCardProps } from "../monthlyCard";
 import FormInput from "../formInput";
@@ -20,14 +20,14 @@ import { getDate } from "../../utils/days";
 import check from "../../assets/check.svg";
 
 export type MonthlyListProps = {
-  notes: MonthlyCardProps[];
+  Transactions: MonthlyCardProps[];
   onUpdateTag: (id: string, label: string) => void;
   onDeleteTag: (id: string) => void;
 } & CreatePurchaseProps;
 
 function MonthlyList({
   availableTags,
-  notes,
+  Transactions,
   onDeleteTag,
   onUpdateTag,
   selectedTags,
@@ -45,19 +45,20 @@ function MonthlyList({
     useState<boolean>(false);
   const { currentMonth } = getDate;
 
-  const filteredNotes = useMemo(
+  const filteredTransactions = useMemo(
     () =>
-      notes?.filter(
-        (note) =>
+      Transactions?.filter(
+        (transaction) =>
           !text.length ||
-          note.title.toLowerCase().includes(text.toLocaleLowerCase()) ||
-          note.tags?.some((noteTag) =>
-            noteTag?.label
+          transaction.title.toLowerCase().includes(text.toLocaleLowerCase()) ||
+          transaction.tags?.some((transactionTag) =>
+            transactionTag?.label
               .toLocaleLowerCase()
               .includes(text.toLocaleLowerCase())
           )
       ),
-    [text, notes]
+
+    [text, Transactions]
   );
 
   const closeTagList = () => setEditTagsModalIsOpen(false);
@@ -80,9 +81,9 @@ function MonthlyList({
         onChange={(e) => setText(e.target.value)}
       />
       <Row xs={1} sm={2} lg={3} xl={4} className="g-4 my-2">
-        {filteredNotes?.map((note) => (
-          <Col key={note.id}>
-            <MonthlyCard {...note} />
+        {filteredTransactions?.map((transaction) => (
+          <Col key={transaction.id}>
+            <MonthlyCard {...transaction} />
           </Col>
         ))}
       </Row>

@@ -10,7 +10,7 @@ import BottomSheetMonthContent from "../bottomSheets/bottomSheetMonthContent";
 
 function MonthPurchaseBody() {
   const {
-    note,
+    transaction,
     monthly: { onOpenMonthClicked },
     openMonthPurchase,
     bottomSheetType,
@@ -24,7 +24,7 @@ function MonthPurchaseBody() {
           gap={3}
           style={{ overflowY: "scroll", overflowX: "hidden", padding: 10 }}
         >
-          {note.purchases.map((purchase) => {
+          {transaction.purchases.map((purchase) => {
             return (
               <div key={purchase.id}>
                 <MonthlyRow

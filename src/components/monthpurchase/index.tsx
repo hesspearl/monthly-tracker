@@ -2,11 +2,11 @@ import { Dispatch, SetStateAction } from "react";
 import { Stack } from "react-bootstrap";
 import style from "./monthPurchase.module.css";
 import EditTagModal from "./header/EditTagModal";
-import { Note, NoteData, Tag } from "../../App";
+import { Transaction, TransactionData, Tag } from "../../App";
 import { MonthPurchaseContextProvider } from "./context/monthPurchaseProvider";
 import MonthPurchaseHeader from "./header";
 import MonthPurchaseBody from "./body/monthPurchaseBody";
-import { useNote } from "../../hook/useNote";
+import { useTransaction } from "../../hook/useTransaction";
 import ToggleButtons from "./toggleButtons";
 import GalleryModal from "./header/galleryModal";
 
@@ -15,10 +15,10 @@ interface MonthlyPurchaseProps {
   setSelectedTags: Dispatch<SetStateAction<Tag[]>>;
   onAddTag: (tag: Tag) => void;
   availableTags: Tag[];
-  notes: Note[];
-  onUpdate: (id: string, data: NoteData) => void;
+
+  onUpdate: (id: string, data: TransactionData) => void;
   onUpdateTag: (id: string, label: string) => void;
-  onDeleteNoteTag: (id: string, tagId: string) => void;
+  onDeleteTransactionTag: (id: string, tagId: string) => void;
 }
 
 function MonthlyPurchase({
@@ -28,9 +28,9 @@ function MonthlyPurchase({
   availableTags,
   onUpdate,
   onUpdateTag,
-  onDeleteNoteTag,
+  onDeleteTransactionTag,
 }: MonthlyPurchaseProps) {
-  const note = useNote();
+  const Transaction = useTransaction();
 
   return (
     <MonthPurchaseContextProvider {...{ onUpdate }}>
@@ -43,17 +43,20 @@ function MonthlyPurchase({
         <MonthPurchaseBody />
         <EditTagModal
           {...{ selectedTags, setSelectedTags, onAddTag, onUpdateTag }}
-          expendTags={note.tags}
+          expendTags={Transaction.tags}
           availableTags={availableTags}
-          onDeleteTag={(id) => onDeleteNoteTag(note.id, id)}
+          onDeleteTag={(id) => onDeleteTransactionTag(Transaction.id, id)}
           onUpdateExpendTags={() =>
-            onUpdate(note.id, {
-              ...note,
-              tagsIds: [...note.tagsIds, ...selectedTags.map((tag) => tag.id)],
+            onUpdate(Transaction.id, {
+              ...Transaction,
+              tagsIds: [
+                ...Transaction.tagsIds,
+                ...selectedTags.map((tag) => tag.id),
+              ],
             })
           }
           onUpdateExpendTagsOrder={(orderedTags: Tag[]) => {
-            onUpdate(note.id, { ...note, tags: orderedTags });
+            onUpdate(Transaction.id, { ...Transaction, tags: orderedTags });
           }}
         />
         <GalleryModal />

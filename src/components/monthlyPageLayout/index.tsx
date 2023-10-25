@@ -1,17 +1,17 @@
 import { Navigate, Outlet, useParams } from "react-router-dom";
-import { Note } from "../../App";
-interface NoteLayoutProps {
-  notes: Note[];
+import { Transaction } from "../../App";
+interface TransactionsLayoutProps {
+  Transactions: Transaction[];
 }
 
-function NoteLayout({ notes }: NoteLayoutProps) {
+function TransactionsLayout({ Transactions }: TransactionsLayoutProps) {
   const { id } = useParams();
-  const note = notes.find((n) => n.id === id);
+  const Transaction = Transactions.find((n) => n.id === id);
 
-  if (!note) {
+  if (!Transaction) {
     return <Navigate to="/" replace />;
   }
-  return <Outlet context={note} />;
+  return <Outlet context={Transaction} />;
 }
 
-export default NoteLayout;
+export default TransactionsLayout;

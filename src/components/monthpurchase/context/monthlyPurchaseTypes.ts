@@ -1,6 +1,6 @@
 import { Dispatch } from "react";
 import { ExpendsProps } from "../bottomSheets/bottomSheetContent";
-import { Note } from "../../../App";
+import { Transaction } from "../../../App";
 import { PurchaseProps } from "../bottomSheets/bottomSheetMonthContent";
 
 type BottomSheetTypes =
@@ -73,5 +73,5 @@ export type DailyProps = {
 export type MonthPurchaseContextProps = MonthPurchaseStatesTypes &
   MonthPurchaseFunctionsTypes & {
     dispatch: Dispatch<MonthPurchaseActionTypes>;
-    note: Note;
+    transaction: Transaction;
   };

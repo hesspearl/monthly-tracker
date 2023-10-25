@@ -23,7 +23,7 @@ export type PurchaseProps = {
 };
 function BottomSheetMonthContent() {
   const {
-    note,
+    transaction,
     monthly: {
       onMonthBottomSheetClose,
       onCreatePurchase,
@@ -36,8 +36,8 @@ function BottomSheetMonthContent() {
   const [isInvalid, setIsInvalid] = useState(false);
 
   const excludedDate = useMemo(
-    () => note.purchases.map((purchase) => new Date(purchase?.date)),
-    [note]
+    () => transaction.purchases.map((purchase) => new Date(purchase?.date)),
+    [transaction]
   );
 
   const handleClick = () => {

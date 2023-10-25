@@ -1,4 +1,4 @@
-import { RawNoteData } from "../../App";
+import { RawTransactionData } from "../../App";
 import FormInput from "../formInput";
 import SelectTags, { SelectTagProps } from "../selectTags";
 import { Button, Form, Stack } from "react-bootstrap";
@@ -10,7 +10,7 @@ import { getDate } from "../../utils/days";
 import ImagesGallery from "../imagesGallarey";
 
 export interface CreatePurchaseProps extends SelectTagProps {
-  onSubmit: (data: RawNoteData) => void;
+  onSubmit: (data: RawTransactionData) => void;
 }
 
 function CreatePurchase({
@@ -20,7 +20,7 @@ function CreatePurchase({
   setSelectedTags,
   selectedTags,
 }: CreatePurchaseProps) {
-  const [data, setData] = useState<Omit<RawNoteData, "tagsIds">>({
+  const [data, setData] = useState<Omit<RawTransactionData, "tagsIds">>({
     title: "",
     total: 0,
     image: images[0],

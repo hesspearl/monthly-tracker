@@ -7,6 +7,7 @@ import { getDate } from "../../../utils/days";
 import BottomSheetDayContent from "../bottomSheets/bottomSheetContent";
 import BottomSheetDeleteDayRow from "../bottomSheets/bottomSheetDeleteRow";
 import BottomSheetMonthContent from "../bottomSheets/bottomSheetMonthContent";
+import { useEffect, useRef } from "react";
 
 function MonthPurchaseBody() {
   const {
@@ -16,6 +17,13 @@ function MonthPurchaseBody() {
     bottomSheetType,
   } = useMonthPurchaseContext();
   const { currentMonth } = getDate;
+  const bottomSheetRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (bottomSheetRef.current) {
+      bottomSheetRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  });
 
   return (
     <div className="d-flex justify-content-center  ">
@@ -44,7 +52,11 @@ function MonthPurchaseBody() {
               </div>
             );
           })}
-          <div className={`${style.bottomSheet} `} id="bottomSheet">
+          <div
+            className={`${style.bottomSheet} `}
+            id="bottomSheet"
+            ref={bottomSheetRef}
+          >
             {bottomSheetType === "edit-expend" && <BottomSheetDayContent />}
             {bottomSheetType === "delete-Expend" && <BottomSheetDeleteDayRow />}
             {bottomSheetType === "edit-month" && <BottomSheetMonthContent />}

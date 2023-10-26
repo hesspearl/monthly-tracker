@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import { Stack } from "react-bootstrap";
 import style from "./monthPurchase.module.css";
 import EditTagModal from "./header/EditTagModal";
-import { Transaction, TransactionData, Tag } from "../../App";
+import { TransactionData, Tag } from "../../App";
 import { MonthPurchaseContextProvider } from "./context/monthPurchaseProvider";
 import MonthPurchaseHeader from "./header";
 import MonthPurchaseBody from "./body/monthPurchaseBody";

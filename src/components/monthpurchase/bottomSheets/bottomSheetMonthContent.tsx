@@ -61,6 +61,8 @@ function BottomSheetMonthContent() {
     // const amount = purchaseData.expends.reduce((total, value) => {
     //   return total + value.amount;
     // }, 0);
+
+    console.log(purchaseData.sumAllExpendsAmounts);
     setIsInvalid(purchaseData.sumAllExpendsAmounts > currentTotal);
 
     dispatch({
@@ -88,6 +90,7 @@ function BottomSheetMonthContent() {
       <Form className="d-flex flex-column align-items-center mt-3 fs-5">
         <Form.Label className="fs-4">Choose a Month</Form.Label>
         <DatePicker
+          disabled={purchaseData.monthId ? true : false}
           excludeDates={excludedDate}
           className={style.pickerInput}
           onChange={(data) => {

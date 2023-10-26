@@ -7,6 +7,7 @@ import MonthPurchaseContext from "./monthPurchaseContext";
 import { DailyProps, MonthlyProps } from "./monthlyPurchaseTypes";
 import {
   initialExpendData,
+  initialPurchaseDate,
   monthlyPurchaseInit,
   monthlyPurchaseState,
 } from "./monthlyPurchaseStates";
@@ -163,6 +164,8 @@ export const MonthPurchaseContextProvider = ({
       (purchase) => purchase.id !== monthId
     );
 
+    onMonthBottomSheetClose();
+    dispatch({ type: "purchaseData", data: initialPurchaseDate });
     onUpdate(transaction.id, {
       ...transaction,
       purchases: updatedPurchase,
@@ -181,7 +184,8 @@ export const MonthPurchaseContextProvider = ({
     const updatedPurchases = transaction.purchases.map((purchase) => {
       if (data.monthId === purchase.id) {
         const amount = data.amount as number;
-        if (purchase.remain < amount) return purchase;
+
+        if (purchase.total < amount) return purchase;
         const updatedAmount = data.previousAmount
           ? amount === 0
             ? -data.previousAmount
@@ -222,6 +226,7 @@ export const MonthPurchaseContextProvider = ({
     dispatch({ type: "bottomSheetTypes", data: "edit-expend" });
     dispatch({ type: "steps", data: 0 });
     dispatch({ type: "expendData", data: initialExpendData });
+    dispatch({ type: "purchaseData", data: initialPurchaseDate });
     bottomSheetHandler("0%", true);
   };
 
@@ -257,6 +262,7 @@ export const MonthPurchaseContextProvider = ({
     onUpdate(transaction.id, { ...transaction, purchases: updatedPurchases });
     onDeleteExpendBottomSheetClose();
     dispatch({ type: "expendData", data: initialExpendData });
+    dispatch({ type: "purchaseData", data: initialPurchaseDate });
   };
 
   const onMonthBottomSheetOpen = () => {

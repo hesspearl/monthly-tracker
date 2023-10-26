@@ -20,6 +20,7 @@ export type PurchaseProps = {
   remain: number;
   total: number;
   expends: Expends[];
+  sumAllExpendsAmounts: number;
 };
 function BottomSheetMonthContent() {
   const {
@@ -57,10 +58,10 @@ function BottomSheetMonthContent() {
 
   const handleEditTotal = (e: React.ChangeEvent<HTMLInputElement>) => {
     const currentTotal = Number(e.target.value);
-    const amount = purchaseData.expends.reduce((total, value) => {
-      return total + value.amount;
-    }, 0);
-    setIsInvalid(amount > currentTotal);
+    // const amount = purchaseData.expends.reduce((total, value) => {
+    //   return total + value.amount;
+    // }, 0);
+    setIsInvalid(purchaseData.sumAllExpendsAmounts > currentTotal);
 
     dispatch({
       type: "purchaseData",

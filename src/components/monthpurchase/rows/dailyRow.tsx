@@ -41,20 +41,38 @@ function DailyRow({
   const bind = useGesture({
     onDrag: ({ args: [index], movement: [x], cancel, direction: [xd] }) => {
       const selectedExpend = expends[index as number];
+      const expendGeneralData = {
+        monthId: monthPurchase.id,
+        month: Number(Months[monthPurchase.month as Months]),
+        amount: selectedExpend.amount,
+        year: monthPurchase.year,
+        day: selectedExpend.day,
+        date: selectedExpend.date,
+        showDate: `${selectedExpend.date}, ${selectedExpend.day[1]} `,
+        remain: monthPurchase.remain,
+        expendId: selectedExpend.id,
+        total: monthPurchase.total,
+      };
       if (xd == 1) {
         dispatch({
           type: "expendData",
           data: {
-            monthId: monthPurchase.id,
-            month: Number(Months[monthPurchase.month as Months]),
-            amount: selectedExpend.amount,
-            year: monthPurchase.year,
-            day: selectedExpend.day,
-            date: selectedExpend.date,
-            showDate: `${selectedExpend.date}, ${selectedExpend.day[1]} `,
-            remain: monthPurchase.remain,
-            expendId: selectedExpend.id,
+            ...expendGeneralData,
             previousAmount: selectedExpend.amount,
+          },
+        });
+        dispatch({
+          type: "purchaseData",
+          data: {
+            ...monthPurchase,
+            monthId: monthPurchase.id,
+            month: monthPurchase.month as string,
+            sumAllExpendsAmounts: monthPurchase.expends.reduce(
+              (total, value) => {
+                return total + value.amount;
+              },
+              0
+            ),
           },
         });
         openEditExpendBottomSheet();
@@ -63,17 +81,7 @@ function DailyRow({
       if (xd == -1) {
         dispatch({
           type: "expendData",
-          data: {
-            monthId: monthPurchase.id,
-            month: Number(Months[monthPurchase.month as Months]),
-            amount: selectedExpend.amount,
-            year: monthPurchase.year,
-            day: selectedExpend.day,
-            date: selectedExpend.date,
-            showDate: `${selectedExpend.date}, ${selectedExpend.day[1]} `,
-            remain: monthPurchase.remain,
-            expendId: selectedExpend.id,
-          },
+          data: expendGeneralData,
         });
         onDeleteExpendBottomSheetOpen();
       }

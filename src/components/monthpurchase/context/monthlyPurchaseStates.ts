@@ -1,5 +1,6 @@
 import { getDate } from "../../../utils/days";
 import { ExpendsProps } from "../bottomSheets/bottomSheetContent";
+import { PurchaseProps } from "../bottomSheets/bottomSheetMonthContent";
 import {
   MonthPurchaseActionTypes,
   MonthPurchaseStatesTypes,
@@ -16,15 +17,17 @@ export const initialExpendData: ExpendsProps = {
   amount: "",
   remain: 0,
   monthId: "",
+  total: 0,
 };
 
-export const initialPurchaseDate = {
+export const initialPurchaseDate: PurchaseProps = {
   month: "",
   year: 0,
   remain: 0,
   total: 0,
   expends: [],
   date: undefined,
+  sumAllExpendsAmounts: 0,
 };
 
 export const monthlyPurchaseInit: MonthPurchaseStatesTypes = {

@@ -6,7 +6,12 @@ function BottomSheetButton({
   buttonsList,
   title,
 }: {
-  buttonsList: { onClick: () => void; color: string; image: string }[];
+  buttonsList: {
+    onClick: () => void;
+    color: string;
+    image: string;
+    disable?: boolean;
+  }[];
   title: string | ReactNode;
 }) {
   return (
@@ -18,6 +23,7 @@ function BottomSheetButton({
             key={index}
             onClick={button.onClick}
             variant={button?.color}
+            disable={button?.disable}
           >
             <Image src={button.image} width={20} height={20} />
           </BigButton>

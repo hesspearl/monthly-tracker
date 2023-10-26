@@ -83,7 +83,7 @@ function App() {
   function onUpdate(id: string, { ...data }: TransactionData): void {
     const updateData: TransactionData = {
       ...data,
-      total: data.purchases[0].remain,
+      total: data?.purchases[0]?.remain,
     };
     setTransactionData((prevTransactions) =>
       prevTransactions.map((Transaction) => {

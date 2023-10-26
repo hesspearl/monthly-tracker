@@ -42,6 +42,9 @@ function MonthlyRow({
         remain,
         expends,
         date: new Date(date),
+        sumAllExpendsAmounts: purchaseData.expends.reduce((total, value) => {
+          return total + value.amount;
+        }, 0),
       },
     });
     onMonthBottomSheetOpen();

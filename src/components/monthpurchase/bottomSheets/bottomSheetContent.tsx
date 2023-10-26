@@ -17,6 +17,7 @@ export type ExpendsProps = {
   date: number;
   amount: number | string;
   remain: number;
+  total: number;
   previousAmount?: number; // store the previous amount before edit
   expendId?: string; // id of edited expend
 };
@@ -24,6 +25,7 @@ export type ExpendsProps = {
 function BottomSheetDayContent() {
   const {
     transaction,
+    purchaseData,
     expendData,
     steps,
     daily: { onUpdateExpends, onCreateExpend, onEditExpendBottomSheetClose },
@@ -66,19 +68,29 @@ function BottomSheetDayContent() {
     onEditExpendBottomSheetClose();
   };
 
-  // const onNewPurchase = () => {
-  //   if (typeof expendData.amount !== "number") {
-  //     return;
-  //   }
-  //   onCreateExpend(expendData);
-  //   dispatch({ type: "expendData", data: { ...expendData, amount: "" } });
-  // };
+  const inValid = useMemo(() => {
+    const expendingAmount = expendData.amount as number;
+    if (purchaseData?.expends.length === 1 && expendData.expendId) {
+      return expendingAmount > expendData.total;
+    }
+
+    if (expendData.remain === 0) {
+      return expendingAmount > expendData.previousAmount!;
+    }
+    return (
+      purchaseData.sumAllExpendsAmounts -
+        expendData.previousAmount! +
+        expendingAmount >
+      expendData.total
+    );
+  }, [expendData, purchaseData]);
 
   const buttonsList = [
     {
       image: check,
       onClick: onSubmit,
       color: "#B6B5ED",
+      disable: inValid,
     },
     // { image: cart, onClick: onNewPurchase, color: "red" },
   ];
@@ -118,7 +130,7 @@ function BottomSheetDayContent() {
         <>
           <BottomSheet.input
             title="Insert expends amount "
-            isInvalid={(expendData.amount as number) > expendData.remain}
+            isInvalid={inValid}
             required
             min={0}
             onChange={(e) =>

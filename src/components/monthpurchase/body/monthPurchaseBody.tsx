@@ -1,4 +1,4 @@
-import { Stack } from "react-bootstrap";
+import { Stack, Toast } from "react-bootstrap";
 import MonthlyRow from "../rows/monthlyRow";
 import DailyRow from "../rows/dailyRow";
 import style from "../monthPurchase.module.css";
@@ -15,6 +15,8 @@ function MonthPurchaseBody() {
     monthly: { onOpenMonthClicked },
     openMonthPurchase,
     bottomSheetType,
+    purchaseData,
+    isTotalValid,
   } = useMonthPurchaseContext();
   const { currentMonth } = getDate;
   const bottomSheetRef = useRef<HTMLDivElement>(null);
@@ -27,6 +29,16 @@ function MonthPurchaseBody() {
 
   return (
     <div className="d-flex justify-content-center  ">
+      <Toast
+        show={isTotalValid}
+        style={{
+          zIndex: 10,
+          position: "absolute",
+        }}
+        bg="danger"
+      >
+        <Toast.Body className="text-white">{`The Total should not be less than  the sum of all expends ${purchaseData.sumAllExpendsAmounts}$ on ${purchaseData.month}'s purchase `}</Toast.Body>
+      </Toast>
       <Stack className={`  p-3 ${style.container}`}>
         <Stack
           gap={3}

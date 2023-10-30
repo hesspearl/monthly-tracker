@@ -23,6 +23,7 @@ export type MonthPurchaseStatesTypes = {
   bottomSheetType: BottomSheetTypes;
   purchaseData: PurchaseProps;
   openGallery: boolean;
+  isTotalValid: boolean;
 };
 
 export type MonthPurchaseActionTypes =
@@ -34,6 +35,7 @@ export type MonthPurchaseActionTypes =
   | { type: "editTagsModalIsOpen"; data: boolean }
   | { type: "bottomSheetTypes"; data: BottomSheetTypes }
   | { type: "purchaseData"; data: PurchaseProps }
+  | { type: "isTotalValid"; data: boolean }
   | {
       type: "openMonthPurchase";
       data: {

@@ -41,6 +41,7 @@ export const monthlyPurchaseInit: MonthPurchaseStatesTypes = {
   editTagsModalIsOpen: false,
   bottomSheetType: "edit-expend",
   openGallery: false,
+  isTotalValid: false,
 };
 
 export const monthlyPurchaseState = (
@@ -96,6 +97,11 @@ export const monthlyPurchaseState = (
       return {
         ...state,
         openGallery: action.data,
+      };
+    case "isTotalValid":
+      return {
+        ...state,
+        isTotalValid: action.data,
       };
     default:
       break;

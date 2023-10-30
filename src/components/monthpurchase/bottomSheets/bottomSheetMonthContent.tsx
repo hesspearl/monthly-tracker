@@ -33,8 +33,8 @@ function BottomSheetMonthContent() {
     },
     dispatch,
     purchaseData,
+    isTotalValid,
   } = useMonthPurchaseContext();
-  const [isInvalid, setIsInvalid] = useState(false);
 
   const excludedDate = useMemo(
     () => transaction.purchases.map((purchase) => new Date(purchase?.date)),
@@ -62,8 +62,10 @@ function BottomSheetMonthContent() {
     //   return total + value.amount;
     // }, 0);
 
-    console.log(purchaseData.sumAllExpendsAmounts);
-    setIsInvalid(purchaseData.sumAllExpendsAmounts > currentTotal);
+    dispatch({
+      type: "isTotalValid",
+      data: purchaseData.sumAllExpendsAmounts > currentTotal,
+    });
 
     dispatch({
       type: "purchaseData",
@@ -82,7 +84,7 @@ function BottomSheetMonthContent() {
           onClick={() => {
             onMonthBottomSheetClose(),
               dispatch({ type: "purchaseData", data: initialPurchaseDate });
-            setIsInvalid(false);
+            dispatch({ type: "isTotalValid", data: false });
           }}
         />
       }
@@ -117,7 +119,7 @@ function BottomSheetMonthContent() {
       <BottomSheet.input
         title="Choose planing total"
         type="number"
-        isInvalid={isInvalid}
+        isInvalid={isTotalValid}
         errorMessage=" the amount is too low!"
         min={0}
         value={purchaseData.total.toString()}
@@ -126,7 +128,7 @@ function BottomSheetMonthContent() {
 
       <div className="d-flex flex-row align-items-center">
         <BigButton
-          disable={isInvalid}
+          disable={isTotalValid}
           bigButtonStyle="m-2"
           variant="#B6B5ED"
           onClick={handleClick}

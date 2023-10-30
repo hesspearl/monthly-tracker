@@ -35,6 +35,7 @@ export const MonthPurchaseContextProvider = ({
       purchaseData,
       image,
       openGallery,
+      isTotalValid,
     },
     dispatch,
   ] = useReducer(monthlyPurchaseState, {
@@ -309,6 +310,7 @@ export const MonthPurchaseContextProvider = ({
         transaction,
         editTagsModalIsOpen,
         purchaseData,
+        isTotalValid,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import PageTitle from "../pageTitle";
 import {
   Row,
@@ -35,6 +35,7 @@ function MonthlyList({
   onAddTag,
   onSubmit,
 }: MonthlyListProps) {
+  const ref = useRef<HTMLInputElement>(null);
   const [text, setText] = useState<string>("");
   const [updateTag, setUpdateTag] = useState<{ tag: string; id: string }>({
     tag: "",
@@ -43,7 +44,7 @@ function MonthlyList({
   const [editModalIsOpen, setEditModalIsOpen] = useState<boolean>(false);
   const [editTagsModalIsOpen, setEditTagsModalIsOpen] =
     useState<boolean>(false);
-  const { currentMonth } = getDate;
+  const { currentMonth: theMonth, year, theDay, month } = getDate;
 
   const filteredTransactions = useMemo(
     () =>
@@ -66,7 +67,7 @@ function MonthlyList({
   return (
     <Container className="mt-4">
       <PageTitle
-        title={`Mϒ  Γist  ,${currentMonth}`}
+        title={`Mϒ  Γist  ,${theMonth}`}
         withButtons
         button1="Create"
         onButtonClick={() => setEditModalIsOpen(true)}

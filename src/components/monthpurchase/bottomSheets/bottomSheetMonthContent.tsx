@@ -9,7 +9,7 @@ import check from "../../../assets/check.svg";
 import bin from "../../../assets/trash-alt.svg";
 import { Expends } from "../../../App";
 import { Months } from "../../../utils/days";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { initialPurchaseDate } from "../context/monthlyPurchaseStates";
 
 export type PurchaseProps = {

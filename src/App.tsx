@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import MonthlyList from "./components/monthlyList";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "flag-icon-css/css/flag-icons.min.css";
 import "./app.css";
 import { useLocalStorage } from "./hook/useLocalStorage";
 import TransactionLayout from "./components/monthlyPageLayout";

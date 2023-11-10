@@ -9,6 +9,7 @@ import {
   InputGroup,
   Button,
   Image,
+  Dropdown,
 } from "react-bootstrap";
 //import TransactionsInputs from "./TransactionsInputs";
 
@@ -18,6 +19,30 @@ import CreatePurchase, { CreatePurchaseProps } from "../createPurchase";
 import styles from "./monthlyList.module.css";
 import { getDate } from "../../utils/days";
 import check from "../../assets/check.svg";
+//import { useTranslation } from "react-i18next";
+import i18n from "i18next";
+import { useTranslation, initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import HttpApi from "i18next-http-backend";
+
+void i18n
+  .use(initReactI18next)
+  .use(LanguageDetector)
+  .use(HttpApi) // passes i18n down to react-i18next
+  .init({
+    supportedLngs: ["en", "fr", "ar"],
+    fallbackLng: "en",
+    detection: {
+      order: ["cookie", "htmlTag", "localStorage", "path", "subdomain"],
+      caches: ["cookie"],
+    },
+    backend: {
+      loadPath: "/assets/locals/{{lng}}/translation.json",
+    },
+    react: {
+      useSuspense: false,
+    },
+  });
 
 export type MonthlyListProps = {
   Transactions: MonthlyCardProps[];
@@ -35,6 +60,7 @@ function MonthlyList({
   onAddTag,
   onSubmit,
 }: MonthlyListProps) {
+  const { t } = useTranslation();
   const [text, setText] = useState<string>("");
   const [updateTag, setUpdateTag] = useState<{ tag: string; id: string }>({
     tag: "",
@@ -43,7 +69,7 @@ function MonthlyList({
   const [editModalIsOpen, setEditModalIsOpen] = useState<boolean>(false);
   const [editTagsModalIsOpen, setEditTagsModalIsOpen] =
     useState<boolean>(false);
-  const { currentMonth: theMonth } = getDate;
+  const { month } = getDate;
 
   const filteredTransactions = useMemo(
     () =>
@@ -66,7 +92,7 @@ function MonthlyList({
   return (
     <Container className="mt-4">
       <PageTitle
-        title={`Mϒ  Γist  ,${theMonth}`}
+        title={t("title", { theMonth: month })}
         withButtons
         button1="Create"
         onButtonClick={() => setEditModalIsOpen(true)}

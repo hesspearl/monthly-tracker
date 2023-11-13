@@ -8,6 +8,7 @@ import BottomSheetDayContent from "../bottomSheets/bottomSheetContent";
 import BottomSheetDeleteDayRow from "../bottomSheets/bottomSheetDeleteRow";
 import BottomSheetMonthContent from "../bottomSheets/bottomSheetMonthContent";
 import { useEffect, useRef } from "react";
+import NotificationToast from "../toats/notifactionToast";
 
 function MonthPurchaseBody() {
   const {
@@ -17,6 +18,7 @@ function MonthPurchaseBody() {
     bottomSheetType,
     purchaseData,
     isTotalValid,
+    dispatch,
   } = useMonthPurchaseContext();
   const { currentMonth } = getDate;
   const bottomSheetRef = useRef<HTMLDivElement>(null);
@@ -29,16 +31,11 @@ function MonthPurchaseBody() {
 
   return (
     <div className="d-flex justify-content-center  ">
-      <Toast
-        show={isTotalValid}
-        style={{
-          zIndex: 10,
-          position: "absolute",
-        }}
-        bg="danger"
-      >
-        <Toast.Body className="text-white">{`The Total should not be less than  the sum of all expends ${purchaseData.sumAllExpendsAmounts}$ on ${purchaseData.month}'s purchase `}</Toast.Body>
-      </Toast>
+      <NotificationToast
+        onClose={() => dispatch({ type: "isTotalValid", data: false })}
+        showToast={isTotalValid}
+        toastMessage={`The Total should not be less than  the sum of all expends ${purchaseData.sumAllExpendsAmounts}$ on ${purchaseData.month}'s purchase `}
+      />
       <Stack className={`  p-3 ${style.container}`}>
         <Stack
           gap={3}

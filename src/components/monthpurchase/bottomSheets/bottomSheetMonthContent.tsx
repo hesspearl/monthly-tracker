@@ -4,13 +4,14 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
 import style from "../monthPurchase.module.css";
-import { BigButton } from "../../button";
+import { BigButton, SmallButton } from "../../button";
 import check from "../../../assets/check.svg";
 import bin from "../../../assets/trash-alt.svg";
 import { Expends } from "../../../App";
 import { Months } from "../../../utils/days";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { initialPurchaseDate } from "../context/monthlyPurchaseStates";
+import WarningToast from "../toats/warningTosat";
 
 export type PurchaseProps = {
   month: string;
@@ -23,6 +24,7 @@ export type PurchaseProps = {
   sumAllExpendsAmounts: number;
 };
 function BottomSheetMonthContent() {
+  const [showDeleteToast, setShowDeleteToast] = useState(false);
   const {
     transaction,
     monthly: {
@@ -89,6 +91,26 @@ function BottomSheetMonthContent() {
         />
       }
     >
+      <WarningToast
+        onClose={() => setShowDeleteToast(false)}
+        showToast={showDeleteToast}
+        toastMessage={
+          <h5>
+            {`are you sure you want to delete purchases of ${purchaseData.month}
+            /${purchaseData.year}?`}
+          </h5>
+        }
+        headerTitle={`Delete ${purchaseData.month}'s Purchases`}
+        toastButtons={
+          <div className="d-flex justify-content-center mt-3">
+            <SmallButton
+              variant="red"
+              onClick={() => onDeletePurchase(purchaseData.monthId!)}
+              image={check}
+            />
+          </div>
+        }
+      />
       <Form className="d-flex flex-column align-items-center mt-3 fs-5">
         <Form.Label className="fs-4">Choose a Month</Form.Label>
         <DatePicker
@@ -139,7 +161,7 @@ function BottomSheetMonthContent() {
           <BigButton
             bigButtonStyle="m-2"
             variant="red"
-            onClick={() => onDeletePurchase(purchaseData.monthId!)}
+            onClick={() => setShowDeleteToast(true)}
           >
             <Image src={bin} />
           </BigButton>

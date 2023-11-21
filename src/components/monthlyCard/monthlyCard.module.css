@@ -10,3 +10,19 @@
     translate: 0-5px;
     box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2 green, blue, alpha);
 }
+
+.dropDown{
+   width:40px;
+height: 40px;
+
+}
+
+.customItem{
+    position: "absolute";
+    z-index: 2;
+    right: -60px;
+    top: 20px;
+    width: 100px;
+    padding: 9px;
+    background-color:"red"
+}

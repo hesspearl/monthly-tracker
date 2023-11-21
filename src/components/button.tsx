@@ -12,7 +12,7 @@ export function SmallButton({
   image?: string;
   text?: string;
   smallButtonStyle?: string;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLElement>) => void;
 }) {
   return (
     <Button

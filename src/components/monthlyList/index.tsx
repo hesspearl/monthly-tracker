@@ -19,10 +19,13 @@ import styles from "./monthlyList.module.css";
 import { getDate } from "../../utils/days";
 import check from "../../assets/check.svg";
 
+import { Transaction } from "../../App";
+
 export type MonthlyListProps = {
-  Transactions: MonthlyCardProps[];
+  Transactions: Transaction[];
   onUpdateTag: (id: string, label: string) => void;
   onDeleteTag: (id: string) => void;
+  onDeleteTransaction: (id: string) => void;
 } & CreatePurchaseProps;
 
 function MonthlyList({
@@ -34,8 +37,10 @@ function MonthlyList({
   setSelectedTags,
   onAddTag,
   onSubmit,
+  onDeleteTransaction,
 }: MonthlyListProps) {
   const [text, setText] = useState<string>("");
+
   const [updateTag, setUpdateTag] = useState<{ tag: string; id: string }>({
     tag: "",
     id: "",
@@ -80,10 +85,16 @@ function MonthlyList({
         inputMaxWidth={"50%"}
         onChange={(e) => setText(e.target.value)}
       />
+
       <Row xs={1} sm={2} lg={3} xl={4} className="g-4 my-2">
         {filteredTransactions?.map((transaction) => (
           <Col key={transaction.id}>
-            <MonthlyCard {...transaction} />
+            <MonthlyCard
+              {...transaction}
+              onDeleteTransaction={() => {
+                onDeleteTransaction(transaction.id);
+              }}
+            />
           </Col>
         ))}
       </Row>

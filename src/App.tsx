@@ -96,6 +96,12 @@ function App() {
     );
   }
 
+  const onDeleteTransaction = (id: string) => {
+    setTransactionData((pre) =>
+      pre.filter((transaction) => transaction.id !== id)
+    );
+  };
+
   function onAddTag(tag: Tag) {
     setTags((prev) => [...prev, tag]);
   }
@@ -163,6 +169,7 @@ function App() {
                 setSelectedTags,
                 onUpdateTag,
                 onDeleteTag,
+                onDeleteTransaction,
               }}
             />
           }

@@ -1,6 +1,6 @@
 import { Toast } from "react-bootstrap";
 import bin from "../../../assets/trash-alt.svg";
-import { ReactElement } from "react";
+import { CSSProperties, ReactElement } from "react";
 
 function WarningToast({
   onClose,
@@ -8,12 +8,14 @@ function WarningToast({
   toastMessage,
   headerTitle,
   toastButtons,
+  containerStyle,
 }: {
   onClose: () => void;
   showToast: boolean;
   toastMessage: string | ReactElement;
   headerTitle: string;
   toastButtons: ReactElement;
+  containerStyle?: CSSProperties;
 }) {
   return (
     <Toast
@@ -22,6 +24,7 @@ function WarningToast({
       style={{
         zIndex: 10,
         position: "absolute",
+        ...containerStyle,
       }}
       bg="danger"
     >

@@ -7,6 +7,7 @@ import calender from "../../../assets/calendar-alt.svg";
 import { SmallButton } from "../../button";
 import BottomSheet from "../../bottomSheet/BottomSheet";
 import { useMonthPurchaseContext } from "../context/monthPurchaseContext";
+import { DayBottomSheetHights } from "./bottomSheetHight";
 
 export type ExpendsProps = {
   month: number;
@@ -18,6 +19,7 @@ export type ExpendsProps = {
   amount: number | string;
   remain: number;
   total: number;
+  title: string;
   previousAmount?: number; // store the previous amount before edit
   expendId?: string; // id of edited expend
 };
@@ -56,7 +58,7 @@ function BottomSheetDayContent() {
   }, [expendData]);
 
   const onSubmit = () => {
-    if (typeof expendData.amount !== "number") {
+    if (typeof expendData.amount !== "number" || !expendData.title) {
       return;
     }
     if (expendData.expendId) {
@@ -102,7 +104,7 @@ function BottomSheetDayContent() {
   }) => {
     dispatch({ type: "expendData", data: { ...expendData, ...date } });
     dispatch({ type: "steps", data: 3 });
-    bottomSheetHandler("75%");
+    bottomSheetHandler(DayBottomSheetHights.MAX_HEIGHT);
   };
 
   const ShowTodayButton = (month: string) => {
@@ -128,6 +130,19 @@ function BottomSheetDayContent() {
       footerStyle={{ display: steps > 2 ? "flex" : "none" }}
       footer={
         <>
+          <BottomSheet.input
+            title="Insert title"
+            isInvalid={!expendData.title}
+            required
+            onChange={(e) =>
+              dispatch({
+                type: "expendData",
+                data: { ...expendData, title: e.target.value },
+              })
+            }
+            value={expendData.title}
+            type="text"
+          />
           <BottomSheet.input
             title="Insert expends amount "
             isInvalid={inValid}
@@ -176,7 +191,7 @@ function BottomSheetDayContent() {
               dispatch({ type: "steps", data: 2 });
 
               onOpenMonthClicked(purchase.id);
-              bottomSheetHandler("40%");
+              bottomSheetHandler(DayBottomSheetHights.MED_HEIGHT);
             }}
           >
             {purchase?.month} / {purchase.year}

@@ -52,6 +52,7 @@ function DailyRow({
         remain: monthPurchase.remain,
         expendId: selectedExpend.id,
         total: monthPurchase.total,
+        title: selectedExpend.title,
       };
       if (xd == 1) {
         dispatch({
@@ -118,6 +119,7 @@ function DailyRow({
               className={` ${style.monthContainer} ${style.dailyContainer} `}
             >
               <h5>{`day ${expends[i].date} ,${expends[i].day[0]}`}</h5>
+              <h5>{expends[i].title}</h5>
 
               <h5>{`-${expends[i].amount}$`}</h5>
             </animated.div>

@@ -18,6 +18,7 @@ export const initialExpendData: ExpendsProps = {
   remain: 0,
   monthId: "",
   total: 0,
+  title: "",
 };
 
 export const initialPurchaseDate: PurchaseProps = {

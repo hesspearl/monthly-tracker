@@ -62,6 +62,7 @@ export type Expends = {
   date: number;
   day: [string, string];
   amount: number;
+  title: string;
 };
 
 const localStorageKey = "TRANSACTIONS";

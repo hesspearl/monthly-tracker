@@ -13,6 +13,11 @@ import {
 } from "./monthlyPurchaseStates";
 import { PurchaseProps } from "../bottomSheets/bottomSheetMonthContent";
 import { Months } from "../../../utils/days";
+import {
+  DayBottomSheetHights,
+  DeleteBottomSheetHight,
+  MonthBottomSheetHight,
+} from "../bottomSheets/bottomSheetHight";
 
 export const MonthPurchaseContextProvider = ({
   children,
@@ -92,6 +97,7 @@ export const MonthPurchaseContextProvider = ({
               date: data.date,
               day: data.day,
               amount,
+              title: data.title,
             },
           ],
         };
@@ -179,7 +185,7 @@ export const MonthPurchaseContextProvider = ({
       data: { id: "", open: false },
     }),
       dispatch({ type: "bottomSheetTypes", data: "edit-expend" }),
-      bottomSheetHandler("25%");
+      bottomSheetHandler(DayBottomSheetHights.MIN_HEIGHT);
   };
   const onUpdateExpends = (data: ExpendsProps) => {
     const updatedPurchases = transaction.purchases.map((purchase) => {
@@ -198,7 +204,13 @@ export const MonthPurchaseContextProvider = ({
           remain: purchase.remain - updatedAmount,
           expends: purchase.expends.map((expend) =>
             expend.id === data.expendId
-              ? { ...expend, date: data.date, day: data.day, amount }
+              ? {
+                  ...expend,
+                  date: data.date,
+                  day: data.day,
+                  amount,
+                  title: data.title,
+                }
               : expend
           ),
         };
@@ -220,7 +232,7 @@ export const MonthPurchaseContextProvider = ({
   const openEditExpendBottomSheet = () => {
     dispatch({ type: "bottomSheetTypes", data: "edit-expend" });
     dispatch({ type: "steps", data: 3 });
-    bottomSheetHandler("75%", false);
+    bottomSheetHandler(DayBottomSheetHights.MAX_HEIGHT, false);
   };
 
   const onEditExpendBottomSheetClose = () => {
@@ -233,7 +245,7 @@ export const MonthPurchaseContextProvider = ({
 
   const onDeleteExpendBottomSheetOpen = () => {
     dispatch({ type: "bottomSheetTypes", data: "delete-Expend" });
-    bottomSheetHandler("35%", false);
+    bottomSheetHandler(DeleteBottomSheetHight, false);
   };
 
   const onDeleteExpendBottomSheetClose = () => {
@@ -268,7 +280,7 @@ export const MonthPurchaseContextProvider = ({
 
   const onMonthBottomSheetOpen = () => {
     dispatch({ type: "bottomSheetTypes", data: "edit-month" }),
-      bottomSheetHandler("55%");
+      bottomSheetHandler(MonthBottomSheetHight);
   };
   const monthly: MonthlyProps = {
     onOpenMonthClicked,
